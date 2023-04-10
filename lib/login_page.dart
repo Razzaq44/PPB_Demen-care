@@ -13,7 +13,9 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   TextEditingController password = TextEditingController();
+  TextEditingController username = TextEditingController();
   void clearText() {
+    username.clear();
     password.clear();
   }
 
@@ -60,9 +62,10 @@ class _LoginPageState extends State<LoginPage> {
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                TextField(
-                  decoration: InputDecoration(
+              children: [
+                TextFormField(
+                  controller: username,
+                  decoration: const InputDecoration(
                     labelText: "Username",
                     border: UnderlineInputBorder(
                       borderSide: BorderSide(),
@@ -152,6 +155,7 @@ class _LoginPageState extends State<LoginPage> {
             TextButton(
               onPressed: () {
                 Get.to(const HomePage());
+                clearText();
               },
               child: Container(
                 height: 40,
@@ -193,6 +197,7 @@ class _LoginPageState extends State<LoginPage> {
             TextButton(
               onPressed: () {
                 Get.to(const HomePage());
+                clearText();
               },
               child: Container(
                 height: 40,
