@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:tubes/Appointment.dart';
 import 'package:tubes/first_page.dart';
 import 'package:tubes/home_page.dart';
@@ -25,6 +26,15 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/register', page: () => const RegisterPage()),
         GetPage(name: '/appointment', page: () => const AppointmentPage()),
         // GetPage(name: '/second', page: () => LoginPage()),
+      ],
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: [
+        Locale('en'), // English
+        Locale('id'), // Indonesia
       ],
       title: 'Tubes',
       theme:
