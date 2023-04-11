@@ -29,7 +29,7 @@ List<Map<String, dynamic>> menu = [
     "desc":
         "Ayo lakukan test demensia untuk mengetahui cara penanganan yang tepat..",
     "image": "assets/test.png",
-    "page": "appointment"
+    "page": "diagnosis"
   },
   {
     "title": "Medicine",
@@ -46,11 +46,11 @@ List<Map<String, dynamic>> menu = [
     "page": "login"
   },
   {
-    "title": "4",
+    "title": "Medical Records",
     "desc":
         "Ayo lakukan test demensia untuk mengetahui cara penanganan yang tepat..",
     "image": "assets/test.png",
-    "page": "appointment"
+    "page": "medicalrecords"
   },
 ];
 
