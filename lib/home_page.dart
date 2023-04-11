@@ -36,7 +36,7 @@ List<Map<String, dynamic>> menu = [
     "desc":
         "Ayo lakukan test demensia untuk mengetahui cara penanganan yang tepat..",
     "image": "assets/test.png",
-    "page": "appointment"
+    "page": "medicine"
   },
   {
     "title": "3",
@@ -237,78 +237,85 @@ class _HomePageState extends State<HomePage> {
                       itemBuilder: (context, index) {
                         int a = 2 * index + 2;
                         int b = 2 * index + 1 + 2;
-                        return InkWell(
-                          onTap: () {
-                            Get.toNamed(menu[index]["page"].toString());
-                          },
+                        return Container(
                           child: Row(
                             children: [
-                              Container(
-                                padding: const EdgeInsets.all(15),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  color: Colors.white,
-                                ),
-                                margin: const EdgeInsets.only(
-                                    left: 40, right: 20, bottom: 20),
-                                width: ((MediaQuery.of(context).size.width) -
-                                        120) /
-                                    2,
-                                height: 150,
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      "${menu[a]["title"]}",
-                                      style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500,
-                                          color: Colors.black),
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    Container(
-                                        height: 80,
-                                        width: 120,
-                                        decoration: BoxDecoration(
-                                            image: DecorationImage(
-                                                image: AssetImage(
-                                                    menu[a]["image"]))))
-                                  ],
+                              InkWell(
+                                onTap: () {
+                                  Get.toNamed(menu[a]["page"].toString());
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.all(15),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    color: Colors.white,
+                                  ),
+                                  margin: const EdgeInsets.only(
+                                      left: 40, right: 20, bottom: 20),
+                                  width: ((MediaQuery.of(context).size.width) -
+                                          120) /
+                                      2,
+                                  height: 150,
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        "${menu[a]["title"]}",
+                                        style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.black),
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      Container(
+                                          height: 80,
+                                          width: 120,
+                                          decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                  image: AssetImage(
+                                                      menu[a]["image"]))))
+                                    ],
+                                  ),
                                 ),
                               ),
-                              Container(
-                                padding: const EdgeInsets.all(15),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  color: Colors.white,
-                                ),
-                                margin: const EdgeInsets.only(
-                                    right: 40, bottom: 15),
-                                width: ((MediaQuery.of(context).size.width) -
-                                        120) /
-                                    2,
-                                height: 150,
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      "${menu[b]["title"]}",
-                                      style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500,
-                                          color: Colors.black),
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    Container(
-                                        height: 80,
-                                        width: 120,
-                                        decoration: BoxDecoration(
-                                            image: DecorationImage(
-                                                image: AssetImage(
-                                                    menu[a]["image"]))))
-                                  ],
+                              InkWell(
+                                onTap: () {
+                                  Get.toNamed(menu[b]["page"].toString());
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.all(15),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    color: Colors.white,
+                                  ),
+                                  margin: const EdgeInsets.only(
+                                      right: 40, bottom: 15),
+                                  width: ((MediaQuery.of(context).size.width) -
+                                          120) /
+                                      2,
+                                  height: 150,
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        "${menu[b]["title"]}",
+                                        style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.black),
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      Container(
+                                          height: 80,
+                                          width: 120,
+                                          decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                  image: AssetImage(
+                                                      menu[b]["image"]))))
+                                    ],
+                                  ),
                                 ),
                               )
                             ],
