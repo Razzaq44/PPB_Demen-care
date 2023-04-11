@@ -7,6 +7,8 @@ import 'package:tubes/login_page.dart';
 import 'package:get/get.dart';
 import 'package:tubes/register_page.dart';
 
+import 'MedicalRecords.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -25,6 +27,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/login', page: () => const LoginPage()),
         GetPage(name: '/register', page: () => const RegisterPage()),
         GetPage(name: '/appointment', page: () => const AppointmentPage()),
+         GetPage(name: '/medicalrecords', page: () => const MedicalRecordsPage()),
         // GetPage(name: '/second', page: () => LoginPage()),
       ],
       localizationsDelegates: [
