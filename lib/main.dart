@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:tubes/Appointment.dart';
+import 'package:tubes/diagnosis.dart';
 import 'package:tubes/first_page.dart';
 import 'package:tubes/home_page.dart';
 import 'package:tubes/login_page.dart';
@@ -27,7 +28,11 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/login', page: () => const LoginPage()),
         GetPage(name: '/register', page: () => const RegisterPage()),
         GetPage(name: '/appointment', page: () => const AppointmentPage()),
+
+        GetPage(name: '/diagnosis', page: () => const DiagnosisPage()),
+
          GetPage(name: '/medicalrecords', page: () => const MedicalRecordsPage()),
+
         // GetPage(name: '/second', page: () => LoginPage()),
       ],
       localizationsDelegates: [

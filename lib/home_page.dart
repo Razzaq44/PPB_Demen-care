@@ -29,7 +29,7 @@ List<Map<String, dynamic>> menu = [
     "desc":
         "Ayo lakukan test demensia untuk mengetahui cara penanganan yang tepat..",
     "image": "assets/test.png",
-    "page": "appointment"
+    "page": "diagnosis"
   },
   {
     "title": "Medicine",
@@ -238,7 +238,9 @@ class _HomePageState extends State<HomePage> {
                         int a = 2 * index + 2;
                         int b = 2 * index + 1 + 2;
                         return InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            Get.toNamed(menu[index]["page"].toString());
+                          },
                           child: Row(
                             children: [
                               Container(
