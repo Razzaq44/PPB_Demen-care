@@ -238,7 +238,9 @@ class _HomePageState extends State<HomePage> {
                         int a = 2 * index + 2;
                         int b = 2 * index + 1 + 2;
                         return InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            Get.toNamed(menu[index]["page"].toString());
+                          },
                           child: Row(
                             children: [
                               Container(
