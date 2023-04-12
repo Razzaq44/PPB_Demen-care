@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:tubes/login_page.dart';
 
 class TestDemen extends StatefulWidget {
   const TestDemen({super.key});
@@ -13,37 +14,31 @@ class _TestDemenState extends State<TestDemen> {
   final items = [
     ListItem(
       title: 'Soal nomer 1',
-      color: Colors.green,
       description: 'blablablabla',
       selectedValue: 1,
     ),
     ListItem(
       title: 'Soal nomer 2',
-      color: Colors.blue,
       description: 'blablablabla',
       selectedValue: 1,
     ),
     ListItem(
       title: 'soal nomer 3',
-      color: Colors.black,
       description: 'description',
       selectedValue: 1,
     ),
     ListItem(
       title: 'soal nomer 4',
-      color: Colors.black,
       description: 'description',
       selectedValue: 1,
     ),
     ListItem(
       title: 'soal nomer 5',
-      color: Colors.black,
       description: 'description',
       selectedValue: 1,
     ),
     ListItem(
       title: 'soal nomer 6',
-      color: Colors.black,
       description: 'description',
       selectedValue: 1,
     ),
@@ -122,7 +117,31 @@ class _TestDemenState extends State<TestDemen> {
         width: double.infinity,
         margin: EdgeInsets.all(40),
         child: ElevatedButton(
-          onPressed: null,
+          onPressed: () {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text('Anda Belum Login!!'),
+                    content: Text('Login sekarang?'),
+                    actions: [
+                      TextButton(
+                        child: Text('Batal'),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                      ElevatedButton(
+                        child: Text('Iya'),
+                        onPressed: () {
+                          Navigator.pop(context);
+                          Get.to(const LoginPage());
+                        },
+                      )
+                    ],
+                  );
+                });
+          },
           child: Text('submit'),
           style: ElevatedButton.styleFrom(
             minimumSize: Size(100, 30),
@@ -138,13 +157,11 @@ class _TestDemenState extends State<TestDemen> {
 
 class ListItem {
   final String title;
-  final Color color;
   final String description;
   int selectedValue; // Menyimpan nilai radio button yang dipilih
 
   ListItem({
     required this.title,
-    required this.color,
     required this.description,
     this.selectedValue = 1,
   });
