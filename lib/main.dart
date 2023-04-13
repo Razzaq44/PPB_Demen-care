@@ -32,12 +32,12 @@ class MyApp extends StatelessWidget {
             name: '/medicalrecords', page: () => const MedicalRecordsPage()),
         GetPage(name: '/medicine', page: () => const ResepObatPage()),
       ],
-      localizationsDelegates: [
+      localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: [
+      supportedLocales: const [
         Locale('en'), // English
         Locale('id'), // Indonesia
       ],

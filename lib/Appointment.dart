@@ -88,7 +88,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
             width: MediaQuery.of(context).size.width,
             height: (MediaQuery.of(context).size.height) / 3.5,
             padding:
-                const EdgeInsets.only(right: 40, left: 40, top: 30, bottom: 20),
+                const EdgeInsets.only(right: 40, left: 40, top: 40, bottom: 20),
             decoration: BoxDecoration(
               color: HexColor("#FFFFFF"),
             ),

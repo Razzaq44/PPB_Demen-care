@@ -42,7 +42,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   height: 40,
                   decoration: const BoxDecoration(
                       image: DecorationImage(
-                    image: AssetImage("assets/Logo2.png"),
+                    image: AssetImage("assets/logo2.png"),
                   )),
                 ),
                 const Text(
@@ -195,30 +195,32 @@ class _RegisterPageState extends State<RegisterPage> {
                       BoxShadow(
                           blurRadius: 8, color: Colors.black.withOpacity(0.2))
                     ]),
-                child: Stack(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
                       height: 30,
-                      margin: const EdgeInsets.only(right: 150, top: 5),
+                      width: 30,
+                      // margin: const EdgeInsets.only(right: 150, top: 5),
                       decoration: const BoxDecoration(
                         image: DecorationImage(
                             image: AssetImage("assets/google.png"),
-                            fit: BoxFit.fitHeight),
+                            fit: BoxFit.fitWidth),
                       ),
                     ),
-                    Container(
-                      margin: const EdgeInsets.only(left: 150, top: 12),
-                      child: const Text(
-                        "Sign Up With Google",
-                        style: TextStyle(fontSize: 14, color: Colors.black),
-                      ),
+                    const SizedBox(
+                      width: 15,
+                    ),
+                    const Text(
+                      "Sign Up With Google",
+                      style: TextStyle(fontSize: 14, color: Colors.black),
                     )
                   ],
                 ),
               ),
             ),
             const SizedBox(
-              height: 15,
+              height: 10,
             ),
             TextButton(
               onPressed: () {
@@ -236,23 +238,25 @@ class _RegisterPageState extends State<RegisterPage> {
                       BoxShadow(
                           blurRadius: 8, color: Colors.black.withOpacity(0.2))
                     ]),
-                child: Stack(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
                       height: 30,
-                      margin: const EdgeInsets.only(right: 150, top: 5),
+                      width: 30,
+                      // margin: const EdgeInsets.only(right: 150, top: 5),
                       decoration: const BoxDecoration(
                         image: DecorationImage(
                             image: AssetImage("assets/apple.png"),
-                            fit: BoxFit.fitHeight),
+                            fit: BoxFit.fitWidth),
                       ),
                     ),
-                    Container(
-                      margin: const EdgeInsets.only(left: 150, top: 12),
-                      child: const Text(
-                        "Sign Up With Apple",
-                        style: TextStyle(fontSize: 14, color: Colors.black),
-                      ),
+                    const SizedBox(
+                      width: 15,
+                    ),
+                    const Text(
+                      "Sign Up With Apple",
+                      style: TextStyle(fontSize: 14, color: Colors.black),
                     )
                   ],
                 ),
