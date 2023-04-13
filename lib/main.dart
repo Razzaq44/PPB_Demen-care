@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:tubes/Appointment.dart';
+import 'package:tubes/MedPre_Patient.dart';
 import 'package:tubes/MedicalRecords.dart';
 import 'package:tubes/diagnosis.dart';
 import 'package:tubes/home_page.dart';
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
         GetPage(
             name: '/medicalrecords', page: () => const MedicalRecordsPage()),
         GetPage(name: '/medicine', page: () => const ResepObatPage()),
+        GetPage(name: '/medpre', page: () => const MedPrePage()),
       ],
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,

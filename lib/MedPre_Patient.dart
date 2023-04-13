@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(MyApp());
+class MedPrePage extends StatefulWidget {
+  const MedPrePage({super.key});
+
+  @override
+  State<MedPrePage> createState() => _MedPrePage();
 }
 
-class MyApp extends StatelessWidget {
+class _MedPrePage extends State<MedPrePage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

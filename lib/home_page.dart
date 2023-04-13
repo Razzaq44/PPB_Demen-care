@@ -39,11 +39,11 @@ List<Map<String, dynamic>> menu = [
     "page": "medicine"
   },
   {
-    "title": "3",
+    "title": "Medical Preception",
     "desc":
         "Ayo lakukan test demensia untuk mengetahui cara penanganan yang tepat..",
     "image": "assets/test.png",
-    "page": "login"
+    "page": "medpre"
   },
   {
     "title": "Medical Records",
