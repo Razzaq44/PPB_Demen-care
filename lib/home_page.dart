@@ -128,6 +128,9 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                 ),
+                const SizedBox(
+                  height: 20,
+                ),
                 Container(
                   height: MediaQuery.of(context).size.height * 0.35,
                   color: Colors.white10.withOpacity(0.1),

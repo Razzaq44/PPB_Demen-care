@@ -118,7 +118,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                 ),
                 SizedBox(
                   width: MediaQuery.of(context).size.width,
-                  height: 120,
+                  height: 100,
                   child: ListView.separated(
                     scrollDirection: Axis.horizontal,
                     itemCount: jadwal.length,
@@ -131,7 +131,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                       return Container(
                         padding: const EdgeInsets.only(
                             top: 15, right: 20, left: 20, bottom: 5),
-                        height: 70,
+                        height: 50,
                         width: 180,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
@@ -310,7 +310,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                   ),
                   dropdownColor: HexColor("#FAF9FE"),
                   decoration: const InputDecoration(
-                      labelText: "Select Doctor",
+                      labelText: "Select Time",
                       icon: Icon(Icons.alarm),
                       border: UnderlineInputBorder()),
                 ),
