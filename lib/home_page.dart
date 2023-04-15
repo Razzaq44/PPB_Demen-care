@@ -16,7 +16,7 @@ List<Map<String, dynamic>> menu = [
     "desc":
         "Ayo lakukan test demensia untuk mengetahui cara penanganan yang tepat",
     "image": "assets/test.png",
-    "page": "login"
+    "page": "test_demensia"
   },
   {
     "title": "Appointment",

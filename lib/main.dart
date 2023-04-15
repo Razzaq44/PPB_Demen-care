@@ -8,6 +8,7 @@ import 'package:tubes/home_page.dart';
 import 'package:tubes/login_page.dart';
 import 'package:get/get.dart';
 import 'package:tubes/register_page.dart';
+import 'package:tubes/test_demensia.dart';
 import 'package:tubes/resep_obat.dart';
 
 void main() {
@@ -28,6 +29,9 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/login', page: () => const LoginPage()),
         GetPage(name: '/register', page: () => const RegisterPage()),
         GetPage(name: '/appointment', page: () => const AppointmentPage()),
+        GetPage(name: '/test_demensia', page: () => const TestDemen())
+        // GetPage(name: '/second', page: () => LoginPage()),
+
         GetPage(name: '/diagnosis', page: () => const DiagnosisPage()),
         GetPage(
             name: '/medicalrecords', page: () => const MedicalRecordsPage()),
