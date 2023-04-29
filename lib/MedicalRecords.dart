@@ -26,8 +26,8 @@ class _MedicalRecordsPageState extends State<MedicalRecordsPage> {
   }
 
   void _showDialog() {
-    String selectedDoctor = '';
-    String selectedPatient = '';
+    String selectedDoctor = 'A';
+    String selectedPatient = '1';
     DateTime selectedDate = DateTime.now();
     String medrecText = '';
 

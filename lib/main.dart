@@ -29,12 +29,11 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/login', page: () => const LoginPage()),
         GetPage(name: '/register', page: () => const RegisterPage()),
         GetPage(name: '/appointment', page: () => const AppointmentPage()),
-        GetPage(name: '/test_demensia', page: () => const TestDemen())
+        GetPage(name: '/test_demensia', page: () => const TestDemen()),
         // GetPage(name: '/second', page: () => LoginPage()),
 
         GetPage(name: '/diagnosis', page: () => const DiagnosisPage()),
-        GetPage(
-            name: '/medicalrecords', page: () => const MedicalRecordsPage()),
+        GetPage(name: '/medicalrecords', page: () => const MedicalRecordsPage()),
         GetPage(name: '/medicine', page: () => const ResepObatPage()),
         GetPage(name: '/medpre', page: () => const MedPrePage()),
       ],
