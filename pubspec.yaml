@@ -28,7 +28,11 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  sqflite:
+  path:
   get:
+  flutter_screenutil: ^5.7.0
+  google_fonts: ^4.0.4
   flutter:
     sdk: flutter
 
@@ -63,24 +67,6 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
 
-  fonts:
-    - family: RobotoCondensed
-      fonts:
-        - asset: fonts/RobotoCondensed-Bold.ttf
-        - asset: fonts/RobotoCondensed-BoldItalic.ttf
-        - asset: fonts/RobotoCondensed-Italic.ttf
-        - asset: fonts/RobotoCondensed-Light.ttf
-        - asset: fonts/RobotoCondensed-LightItalic.ttf
-        - asset: fonts/RobotoCondensed-Regular.ttf
-    - family: Courgette
-      fonts:
-        - asset: fonts/Courgette-Regular.ttf
-    - family: Lora
-      fonts:
-        - asset: fonts/Lora-Medium.ttf
-        - asset: fonts/Lora-SemiBold.ttf
-        - asset: fonts/Lora-Regular.ttf
-
   uses-material-design: true
 
   assets:
@@ -92,6 +78,10 @@ flutter:
     - assets/logo2.png
     - assets/appointment.png
     - assets/card.png
+    - assets/medPre.png
+    - assets/medic.png
+    - assets/medRec.png
+    - assets/diagnosis.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:
