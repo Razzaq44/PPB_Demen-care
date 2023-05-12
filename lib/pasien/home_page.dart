@@ -54,60 +54,59 @@ class _HomePageState extends State<HomePage> {
     final bodyHeight =
         MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top;
     return Scaffold(
+        appBar: AppBar(
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Hello",
+                        style: TextStyle(
+                            fontSize: 14.sp,
+                            color: HexColor('#000000'),
+                            fontWeight: FontWeight.w300),
+                      ),
+                      Text(
+                        "Carolina Terner",
+                        style: TextStyle(
+                            fontSize: 18.sp, color: HexColor('#000000')),
+                      ),
+                    ],
+                  ),
+                  Expanded(child: Container()),
+                  InkWell(
+                    onTap: () {
+                      Get.to(const LoginPage());
+                    },
+                    child: Container(
+                        alignment: Alignment.center,
+                        width: 40.w,
+                        height: 40.w,
+                        decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                                image: AssetImage("assets/logo2.png"),
+                                fit: BoxFit.fitWidth))),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          automaticallyImplyLeading: false,
+          backgroundColor: Colors.white,
+          elevation: 0.0,
+        ),
         resizeToAvoidBottomInset: false,
         backgroundColor: HexColor("#F4F6FF"),
         body: SafeArea(
           child: Column(
             children: [
-              Container(
-                width: 375.w,
-                height: 55.w,
-                padding: EdgeInsets.only(top: 8.h, right: 30.w, left: 30.w),
-                color: Colors.white,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Hello",
-                              style: TextStyle(
-                                  fontSize: 14.sp,
-                                  color: HexColor('#000000'),
-                                  fontWeight: FontWeight.w300),
-                            ),
-                            Text(
-                              "Carolina Terner",
-                              style: TextStyle(
-                                  fontSize: 18.sp, color: HexColor('#000000')),
-                            ),
-                          ],
-                        ),
-                        Expanded(child: Container()),
-                        InkWell(
-                          onTap: () {
-                            Get.to(const LoginPage());
-                          },
-                          child: Container(
-                              alignment: Alignment.center,
-                              width: 40.w,
-                              height: 40.w,
-                              decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  image: DecorationImage(
-                                      image: AssetImage("assets/logo2.png"),
-                                      fit: BoxFit.fitWidth))),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
               SizedBox(
-                height: 20.h,
+                height: 10.w,
               ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 30.w),
@@ -239,7 +238,7 @@ class _HomePageState extends State<HomePage> {
                               margin: EdgeInsets.only(
                                   left: 25.w, right: 45.w, bottom: 15.h),
                               width: 135.w,
-                              height: 135.h,
+                              height: 135.w,
                               child: Column(
                                 children: [
                                   Text(
@@ -250,7 +249,7 @@ class _HomePageState extends State<HomePage> {
                                         color: Colors.black),
                                   ),
                                   SizedBox(
-                                    height: 10.h,
+                                    height: 10.w,
                                   ),
                                   Container(
                                       height: 70.w,
@@ -259,7 +258,7 @@ class _HomePageState extends State<HomePage> {
                                           image: DecorationImage(
                                               image:
                                                   AssetImage(menu[a]["image"]),
-                                              fit: BoxFit.fitWidth)))
+                                              fit: BoxFit.fitHeight)))
                                 ],
                               ),
                             ),
@@ -277,7 +276,7 @@ class _HomePageState extends State<HomePage> {
                               margin:
                                   EdgeInsets.only(right: 25.w, bottom: 15.h),
                               width: 135.w,
-                              height: 135.h,
+                              height: 135.w,
                               child: Column(
                                 children: [
                                   Text(
@@ -288,7 +287,7 @@ class _HomePageState extends State<HomePage> {
                                         color: Colors.black),
                                   ),
                                   SizedBox(
-                                    height: 10.h,
+                                    height: 10.w,
                                   ),
                                   Container(
                                       height: 70.w,
@@ -297,7 +296,7 @@ class _HomePageState extends State<HomePage> {
                                           image: DecorationImage(
                                               image:
                                                   AssetImage(menu[b]["image"]),
-                                              fit: BoxFit.fitWidth)))
+                                              fit: BoxFit.fitHeight)))
                                 ],
                               ),
                             ),
