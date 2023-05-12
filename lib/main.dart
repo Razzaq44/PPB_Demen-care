@@ -1,19 +1,24 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:tubes/Appointment.dart';
-import 'package:tubes/MedPre_Patient.dart';
-import 'package:tubes/MedicalRecords.dart';
-import 'package:tubes/diagnosis.dart';
-import 'package:tubes/home_page.dart';
-import 'package:tubes/login_page.dart';
+import 'dokter/AppointmentDokter.dart';
+import 'pasien/Appointment.dart';
+import 'pasien/MedPre_Patient.dart';
+import 'pasien/MedicalRecords.dart';
+import 'pasien/diagnosis.dart';
+import 'pasien/home_page.dart';
+import 'login_page.dart';
 import 'package:get/get.dart';
-import 'package:tubes/register_page.dart';
-import 'package:tubes/test_demensia.dart';
-import 'package:tubes/resep_obat.dart';
+import 'register_page.dart';
+import 'pasien/test_demensia.dart';
+import 'pasien/resep_obat.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'dokter/home_pageD.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -27,16 +32,17 @@ class MyApp extends StatelessWidget {
       designSize: const Size(375, 812),
       builder: (context, child) {
         return GetMaterialApp(
-          initialRoute: '/',
+          debugShowCheckedModeBanner: false,
+          initialRoute: '/login',
           getPages: [
             GetPage(name: '/', page: () => const LoginPage()),
             GetPage(name: '/home', page: () => const HomePage()),
+            GetPage(name: '/homeDokter', page: () => const HomePageDokter()),
             GetPage(name: '/login', page: () => const LoginPage()),
             GetPage(name: '/register', page: () => const RegisterPage()),
             GetPage(name: '/appointment', page: () => const AppointmentPage()),
+            GetPage(name: '/appDokter', page: () => const AppDokterPage()),
             GetPage(name: '/test_demensia', page: () => const TestDemen()),
-            // GetPage(name: '/second', page: () => LoginPage()),
-
             GetPage(name: '/diagnosis', page: () => const DiagnosisPage()),
             GetPage(
                 name: '/medicalrecords',

@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:tubes/login_page.dart';
+import 'login_page.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'home_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:io';
+
+import 'pasien/home_page.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -16,13 +20,28 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   final roleSelected = TextEditingController();
 
-  _RegisterPageState() {
-    selectRole = rolesList[0];
-  }
+  _RegisterPageState();
 
-  String? selectRole = "";
+  bool showProgress = false;
+  bool visible = false;
 
-  final rolesList = ["Pasien", "Dokter"];
+  final _formkey = GlobalKey<FormState>();
+  final _auth = FirebaseAuth.instance;
+
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmpassController = TextEditingController();
+  final TextEditingController name = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController mobile = TextEditingController();
+  bool _isObscure = true;
+  bool _isObscure2 = true;
+  File? file;
+  var options = [
+    'Pasien',
+    'Dokter',
+  ];
+  var _currentItemSelected = "Pasien";
+  var role = "Pasien";
 
   @override
   Widget build(BuildContext context) {
@@ -35,276 +54,344 @@ class _RegisterPageState extends State<RegisterPage> {
             child: CustomScrollView(slivers: [
               SliverFillRemaining(
                 hasScrollBody: false,
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: 25.h,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          alignment: Alignment.center,
-                          width: 40.w,
-                          height: 40.w,
-                          decoration: const BoxDecoration(
-                              image: DecorationImage(
-                            image: AssetImage("assets/logo2.png"),
-                          )),
+                child: Form(
+                  key: _formkey,
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 25.h,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            alignment: Alignment.center,
+                            width: 40.w,
+                            height: 40.w,
+                            decoration: const BoxDecoration(
+                                image: DecorationImage(
+                              image: AssetImage("assets/logo2.png"),
+                            )),
+                          ),
+                          Text(
+                            "\t\tDemen-Care",
+                            style: TextStyle(
+                                fontSize: 26.sp, fontWeight: FontWeight.w500),
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      Text(
+                        "Exceptional Care Close to You",
+                        style: TextStyle(
+                            fontSize: 16.sp, fontWeight: FontWeight.normal),
+                      ),
+                      SizedBox(
+                        height: 50.h,
+                      ),
+                      SizedBox(
+                        width: 275.w,
+                        height: 50.h,
+                        child: TextFormField(
+                          controller: emailController,
+                          decoration: const InputDecoration(
+                            hintText: "Email",
+                            enabled: true,
+                            border: UnderlineInputBorder(
+                              borderSide: BorderSide(),
+                            ),
+                          ),
+                          validator: (value) {
+                            if (value!.length == 0) {
+                              return "Email cannot be empty";
+                            }
+                            if (!RegExp(
+                                    "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
+                                .hasMatch(value)) {
+                              return ("Please enter a valid email");
+                            } else {
+                              return null;
+                            }
+                          },
+                          onChanged: (value) {},
+                          keyboardType: TextInputType.emailAddress,
                         ),
-                        Text(
-                          "\t\tDemen-Care",
-                          style: TextStyle(
-                              fontSize: 26.sp, fontWeight: FontWeight.w500),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    Text(
-                      "Exceptional Care Close to You",
-                      style: TextStyle(
-                          fontSize: 16.sp, fontWeight: FontWeight.normal),
-                    ),
-                    SizedBox(
-                      height: 50.h,
-                    ),
-                    SizedBox(
-                      width: 275.w,
-                      height: 50.h,
-                      child: TextFormField(
-                        decoration: const InputDecoration(
-                          labelText: "Username",
-                          border: UnderlineInputBorder(
-                            borderSide: BorderSide(),
+                      ),
+                      SizedBox(
+                        height: 15.h,
+                      ),
+                      SizedBox(
+                        width: 275.w,
+                        height: 50.h,
+                        child: TextFormField(
+                          obscureText: _isObscure,
+                          controller: passwordController,
+                          decoration: InputDecoration(
+                            suffixIcon: IconButton(
+                                icon: Icon(_isObscure
+                                    ? Icons.visibility_off
+                                    : Icons.visibility),
+                                onPressed: () {
+                                  setState(() {
+                                    _isObscure = !_isObscure;
+                                  });
+                                }),
+                            hintText: "Password",
+                            border: const UnderlineInputBorder(
+                              borderSide: BorderSide(),
+                            ),
+                            enabled: true,
+                          ),
+                          validator: (value) {
+                            RegExp regex = RegExp(r'^.{6,}$');
+                            if (value!.isEmpty) {
+                              return "Password cannot be empty";
+                            }
+                            if (!regex.hasMatch(value)) {
+                              return ("please enter valid password min. 6 character");
+                            } else {
+                              return null;
+                            }
+                          },
+                          onChanged: (value) {},
+                        ),
+                      ),
+                      SizedBox(
+                        height: 15.h,
+                      ),
+                      SizedBox(
+                        width: 275.w,
+                        height: 50.h,
+                        child: TextFormField(
+                          obscureText: _isObscure2,
+                          controller: confirmpassController,
+                          decoration: InputDecoration(
+                            suffixIcon: IconButton(
+                                icon: Icon(_isObscure2
+                                    ? Icons.visibility_off
+                                    : Icons.visibility),
+                                onPressed: () {
+                                  setState(() {
+                                    _isObscure2 = !_isObscure2;
+                                  });
+                                }),
+                            hintText: "Confirm Password",
+                            border: const UnderlineInputBorder(
+                              borderSide: BorderSide(),
+                            ),
+                            enabled: true,
+                          ),
+                          validator: (value) {
+                            if (confirmpassController.text !=
+                                passwordController.text) {
+                              return "Password did not match";
+                            } else {
+                              return null;
+                            }
+                          },
+                          onChanged: (value) {},
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10.w,
+                      ),
+                      SizedBox(
+                        width: 275.w,
+                        child: DropdownButtonFormField<String>(
+                          items: options.map((String dropDownStringItem) {
+                            return DropdownMenuItem<String>(
+                              value: dropDownStringItem,
+                              child: Text(
+                                dropDownStringItem,
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 14.sp,
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (newValueSelected) {
+                            setState(() {
+                              _currentItemSelected = newValueSelected!;
+                              role = newValueSelected;
+                            });
+                          },
+                          value: _currentItemSelected,
+                          icon: Icon(
+                            Icons.arrow_drop_down_circle,
+                            color: HexColor("#206A5D"),
+                          ),
+                          dropdownColor: HexColor("#FAF9FE"),
+                          decoration: InputDecoration(
+                              labelText: "Select Your Role",
+                              prefixIcon: Icon(Icons.accessibility_new_rounded,
+                                  color: HexColor("#206A5D")),
+                              border: const UnderlineInputBorder()),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20.h,
+                      ),
+                      SizedBox(
+                        width: 275.w,
+                        height: 40.h,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              showProgress = true;
+                            });
+                            signUp(emailController.text,
+                                passwordController.text, role);
+                          },
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: HexColor("#81B214")),
+                          child: Text(
+                            "Sign-Up",
+                            style: TextStyle(
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.white),
                           ),
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 15.h,
-                    ),
-                    SizedBox(
-                      width: 275.w,
-                      height: 50.h,
-                      child: TextFormField(
-                        decoration: const InputDecoration(
-                          labelText: "Password",
-                          border: UnderlineInputBorder(
-                            borderSide: BorderSide(),
+                      SizedBox(
+                        height: 20.h,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            height: 2.h,
+                            width: 80.w,
+                            color: Colors.black54,
                           ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 15.h,
-                    ),
-                    SizedBox(
-                      width: 275.w,
-                      height: 50.h,
-                      child: TextFormField(
-                        decoration: const InputDecoration(
-                          labelText: "Confirm Password",
-                          border: UnderlineInputBorder(
-                            borderSide: BorderSide(),
+                          Text(
+                            "\t\t\tOr Continue With\t\t\t",
+                            style: TextStyle(
+                                fontSize: 14.sp, fontWeight: FontWeight.normal),
                           ),
-                        ),
+                          Container(
+                            height: 2.h,
+                            width: 80.w,
+                            color: Colors.black54,
+                          ),
+                        ],
                       ),
-                    ),
-                    SizedBox(
-                      height: 15.h,
-                    ),
-                    SizedBox(
-                      width: 275.w,
-                      child: DropdownButtonFormField(
-                        value: selectRole,
-                        items: rolesList
-                            .map((e) => DropdownMenuItem(
-                                  value: e,
-                                  child: Text(e),
-                                ))
-                            .toList(),
-                        onChanged: (val) {
-                          setState(() {
-                            selectRole = val as String;
-                          });
-                        },
-                        icon: Icon(
-                          Icons.arrow_drop_down_circle,
-                          color: HexColor("#206A5D"),
-                        ),
-                        dropdownColor: HexColor("#FAF9FE"),
-                        decoration: InputDecoration(
-                            labelText: "Select Your Role",
-                            prefixIcon: Icon(Icons.accessibility_new_rounded,
-                                color: HexColor("#206A5D")),
-                            border: const UnderlineInputBorder()),
+                      SizedBox(
+                        height: 20.h,
                       ),
-                    ),
-                    SizedBox(
-                      height: 20.h,
-                    ),
-                    SizedBox(
-                      width: 275.w,
-                      height: 40.h,
-                      child: ElevatedButton(
+                      TextButton(
                         onPressed: () {
                           Get.to(const HomePage());
                         },
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: HexColor("#81B214")),
-                        child: Text(
-                          "Sign-Up",
-                          style: TextStyle(
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.white),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20.h,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          height: 2.h,
-                          width: 80.w,
-                          color: Colors.black54,
-                        ),
-                        Text(
-                          "\t\t\tOr Continue With\t\t\t",
-                          style: TextStyle(
-                              fontSize: 14.sp, fontWeight: FontWeight.normal),
-                        ),
-                        Container(
-                          height: 2.h,
-                          width: 80.w,
-                          color: Colors.black54,
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20.h,
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Get.to(const HomePage());
-                      },
-                      child: Container(
-                        height: 50.h,
-                        width: 275.w,
-                        decoration: BoxDecoration(
-                            color: HexColor("#FAF9FE"),
-                            borderRadius: BorderRadius.circular(50),
-                            boxShadow: [
-                              BoxShadow(
-                                  blurRadius: 8,
-                                  color: Colors.black.withOpacity(0.2)),
-                              BoxShadow(
-                                  blurRadius: 8,
-                                  color: Colors.black.withOpacity(0.2))
-                            ]),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              height: 30.w,
-                              width: 30.w,
-                              decoration: const BoxDecoration(
-                                image: DecorationImage(
-                                    image: AssetImage("assets/google.png"),
-                                    fit: BoxFit.fitWidth),
+                        child: Container(
+                          height: 50.h,
+                          width: 275.w,
+                          decoration: BoxDecoration(
+                              color: HexColor("#FAF9FE"),
+                              borderRadius: BorderRadius.circular(50),
+                              boxShadow: [
+                                BoxShadow(
+                                    blurRadius: 8,
+                                    color: Colors.black.withOpacity(0.2)),
+                                BoxShadow(
+                                    blurRadius: 8,
+                                    color: Colors.black.withOpacity(0.2))
+                              ]),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                height: 30.w,
+                                width: 30.w,
+                                decoration: const BoxDecoration(
+                                  image: DecorationImage(
+                                      image: AssetImage("assets/google.png"),
+                                      fit: BoxFit.fitWidth),
+                                ),
                               ),
-                            ),
-                            SizedBox(
-                              width: 8.w,
-                            ),
-                            Text(
-                              "Sign Up With Google",
-                              style: TextStyle(
-                                  fontSize: 14.sp, color: Colors.black),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 15.h,
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Get.to(const HomePage());
-                      },
-                      child: Container(
-                        height: 50.h,
-                        width: 275.w,
-                        decoration: BoxDecoration(
-                            color: HexColor("#FAF9FE"),
-                            borderRadius: BorderRadius.circular(50),
-                            boxShadow: [
-                              BoxShadow(
-                                  blurRadius: 8,
-                                  color: Colors.black.withOpacity(0.2)),
-                              BoxShadow(
-                                  blurRadius: 8,
-                                  color: Colors.black.withOpacity(0.2))
-                            ]),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              height: 30.w,
-                              width: 30.w,
-                              // margin: const EdgeInsets.only(right: 150, top: 5),
-                              decoration: const BoxDecoration(
-                                image: DecorationImage(
-                                    image: AssetImage("assets/apple.png"),
-                                    fit: BoxFit.fitWidth),
+                              SizedBox(
+                                width: 8.w,
                               ),
-                            ),
-                            SizedBox(
-                              width: 8.w,
-                            ),
-                            Text(
-                              "Sign Up With Apple",
-                              style: TextStyle(
-                                  fontSize: 14.sp, color: Colors.black),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    Expanded(child: Container()),
-                    Container(
-                      margin: EdgeInsets.symmetric(vertical: 20.h),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Already have an account?",
-                            style: TextStyle(fontSize: 14.sp),
-                          ),
-                          TextButton(
-                              onPressed: () {
-                                Get.to(const LoginPage());
-                              },
-                              child: Text(
-                                "Sign-In here",
+                              Text(
+                                "Sign Up With Google",
                                 style: TextStyle(
-                                    fontSize: 14.sp,
-                                    color: Colors.lightBlueAccent),
-                              ))
-                        ],
+                                    fontSize: 14.sp, color: Colors.black),
+                              )
+                            ],
+                          ),
+                        ),
                       ),
-                    )
-                  ],
+                      SizedBox(
+                        height: 15.h,
+                      ),
+                      Expanded(child: Container()),
+                      Container(
+                        margin: EdgeInsets.symmetric(vertical: 20.h),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Already have an account?",
+                              style: TextStyle(fontSize: 14.sp),
+                            ),
+                            TextButton(
+                                onPressed: () {
+                                  Get.off(const LoginPage());
+                                },
+                                child: Text(
+                                  "Sign-In here",
+                                  style: TextStyle(
+                                      fontSize: 14.sp,
+                                      color: Colors.lightBlueAccent),
+                                ))
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               )
             ]),
           ),
         ));
+  }
+
+  void signUp(String email, String password, String role) async {
+    const CircularProgressIndicator();
+    if (_formkey.currentState!.validate()) {
+      try {
+        await _auth
+            .createUserWithEmailAndPassword(email: email, password: password)
+            .then((value) => {postDetailsToFirestore(email, role)});
+      } on FirebaseAuthException catch (e) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            content: Text(
+              e.toString(),
+              style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w400),
+            ),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.pop(context, 'OK'),
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+      }
+    }
+  }
+
+  postDetailsToFirestore(String email, String rool) async {
+    FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+    var user = _auth.currentUser;
+    CollectionReference ref = FirebaseFirestore.instance.collection('users');
+    ref.doc(user!.uid).set({'email': emailController.text, 'role': role});
+    Get.off(const LoginPage());
   }
 }
