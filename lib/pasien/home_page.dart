@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -49,10 +51,12 @@ List<Map<String, dynamic>> menu = [
 ];
 
 class _HomePageState extends State<HomePage> {
+  String? _name;
   @override
   Widget build(BuildContext context) {
     final bodyHeight =
         MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top;
+    getUsn();
     return Scaffold(
         appBar: AppBar(
           title: Column(
@@ -71,7 +75,7 @@ class _HomePageState extends State<HomePage> {
                             fontWeight: FontWeight.w300),
                       ),
                       Text(
-                        "Carolina Terner",
+                        "${_name?.capitalizeFirst!}",
                         style: TextStyle(
                             fontSize: 18.sp, color: HexColor('#000000')),
                       ),
@@ -80,7 +84,7 @@ class _HomePageState extends State<HomePage> {
                   Expanded(child: Container()),
                   InkWell(
                     onTap: () {
-                      Get.to(const LoginPage());
+                      logout(context);
                     },
                     child: Container(
                         alignment: Alignment.center,
@@ -309,41 +313,20 @@ class _HomePageState extends State<HomePage> {
               )),
               Container(
                 width: MediaQuery.of(context).size.width,
-                height: 50,
+                height: 55.h,
                 color: Colors.white,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     TextButton(
-                      onPressed: () {},
-                      child: Icon(
-                        Icons.account_circle_rounded,
-                        size: 32,
-                        color: HexColor("#000000").withOpacity(0.5),
-                      ),
-                    ),
-                    TextButton(
                       onPressed: () {
-                        Get.to(const HomePage());
+                        Get.off(const HomePage());
                       },
                       child: Icon(
                         Icons.home_rounded,
-                        size: 32,
+                        size: 28.w,
                         color: HexColor("#000000").withOpacity(0.8),
                       ),
-                      // child: Container(
-                      //   width: 40,
-                      //   height: 40,
-                      //   decoration: BoxDecoration(
-                      //       image: DecorationImage(
-                      //           image: AssetImage("assets/Logo.png"),
-                      //           fit: BoxFit.cover)),
-                    ),
-                    TextButton(
-                      onPressed: () {},
-                      child: Icon(Icons.settings,
-                          size: 32,
-                          color: HexColor("#000000").withOpacity(0.5)),
                     ),
                   ],
                 ),
@@ -351,5 +334,19 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ));
+  }
+
+  Future<void> logout(BuildContext context) async {
+    Get.offAll(const LoginPage());
+    await FirebaseAuth.instance.signOut();
+  }
+
+  void getUsn() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    final DocumentSnapshot userDoc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user?.uid)
+        .get();
+    _name = userDoc.get('username');
   }
 }

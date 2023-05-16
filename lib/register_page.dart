@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'dokter/home_pageD.dart';
 import 'login_page.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -30,9 +31,8 @@ class _RegisterPageState extends State<RegisterPage> {
 
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmpassController = TextEditingController();
-  final TextEditingController name = TextEditingController();
+  final TextEditingController userNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
-  final TextEditingController mobile = TextEditingController();
   bool _isObscure = true;
   bool _isObscure2 = true;
   File? file;
@@ -90,6 +90,35 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                       SizedBox(
                         height: 50.h,
+                      ),
+                      SizedBox(
+                        width: 275.w,
+                        height: 50.h,
+                        child: TextFormField(
+                          controller: userNameController,
+                          decoration: const InputDecoration(
+                            hintText: "Username",
+                            enabled: true,
+                            border: UnderlineInputBorder(
+                              borderSide: BorderSide(),
+                            ),
+                          ),
+                          validator: (value) {
+                            if (value!.length == 0) {
+                              return "Username cannot be empty";
+                            }
+                            if (!RegExp("^[a-zA-Z0-9+_.-]").hasMatch(value)) {
+                              return ("Please enter a valid username");
+                            } else {
+                              return null;
+                            }
+                          },
+                          onChanged: (value) {},
+                          keyboardType: TextInputType.name,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 15.h,
                       ),
                       SizedBox(
                         width: 275.w,
@@ -243,8 +272,11 @@ class _RegisterPageState extends State<RegisterPage> {
                             setState(() {
                               showProgress = true;
                             });
-                            signUp(emailController.text,
-                                passwordController.text, role);
+                            signUp(
+                                emailController.text,
+                                passwordController.text,
+                                role,
+                                userNameController.text);
                           },
                           style: ElevatedButton.styleFrom(
                               backgroundColor: HexColor("#81B214")),
@@ -360,13 +392,15 @@ class _RegisterPageState extends State<RegisterPage> {
         ));
   }
 
-  void signUp(String email, String password, String role) async {
+  void signUp(
+      String email, String password, String role, String userName) async {
     const CircularProgressIndicator();
     if (_formkey.currentState!.validate()) {
       try {
         await _auth
             .createUserWithEmailAndPassword(email: email, password: password)
-            .then((value) => {postDetailsToFirestore(email, role)});
+            .then((value) => {postDetailsToFirestore(email, role, userName)});
+        login(email, password);
       } on FirebaseAuthException catch (e) {
         showDialog(
           context: context,
@@ -387,11 +421,57 @@ class _RegisterPageState extends State<RegisterPage> {
     }
   }
 
-  postDetailsToFirestore(String email, String rool) async {
+  postDetailsToFirestore(String email, String role, String userName) async {
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
     var user = _auth.currentUser;
     CollectionReference ref = FirebaseFirestore.instance.collection('users');
-    ref.doc(user!.uid).set({'email': emailController.text, 'role': role});
-    Get.off(const LoginPage());
+    ref.doc(user!.uid).set(
+        {'email': emailController.text, 'role': role, 'username': userName});
+  }
+
+  login(String email, String password) async {
+    try {
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      route();
+    } on FirebaseAuthException catch (e) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          content: Text(
+            'Error',
+            style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w400),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.pop(context, 'OK'),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    }
+  }
+
+  void route() {
+    User? user = FirebaseAuth.instance.currentUser;
+    var kk = FirebaseFirestore.instance
+        .collection('users')
+        .doc(user!.uid)
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
+        if (documentSnapshot.get('role') == "Dokter") {
+          Get.to(const HomePageDokter());
+        } else {
+          Get.offAll(const HomePage());
+        }
+      } else {
+        print('Document does not exist on the database');
+      }
+    });
   }
 }

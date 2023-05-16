@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
       builder: (context, child) {
         return GetMaterialApp(
           debugShowCheckedModeBanner: false,
-          initialRoute: '/login',
+          initialRoute: '/',
           getPages: [
             GetPage(name: '/', page: () => const LoginPage()),
             GetPage(name: '/home', page: () => const HomePage()),
