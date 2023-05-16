@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -39,9 +41,58 @@ List<Map<String, dynamic>> menu = [
 ];
 
 class _HomePageDokterState extends State<HomePageDokter> {
+  String? _name;
+
   @override
   Widget build(BuildContext context) {
+    getUsn();
     return Scaffold(
+        appBar: AppBar(
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Hello",
+                        style: TextStyle(
+                            fontSize: 14.sp,
+                            color: HexColor('#000000'),
+                            fontWeight: FontWeight.w300),
+                      ),
+                      Text(
+                        'dr. ${_name?.capitalizeFirst!}',
+                        style: TextStyle(
+                            fontSize: 18.sp, color: HexColor('#000000')),
+                      ),
+                    ],
+                  ),
+                  Expanded(child: Container()),
+                  InkWell(
+                    onTap: () {
+                      logout(context);
+                    },
+                    child: Container(
+                        alignment: Alignment.center,
+                        width: 40.w,
+                        height: 40.w,
+                        decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                                image: AssetImage("assets/logo2.png"),
+                                fit: BoxFit.fitWidth))),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          automaticallyImplyLeading: false,
+          backgroundColor: Colors.white,
+          elevation: 0.0,
+        ),
         resizeToAvoidBottomInset: false,
         backgroundColor: HexColor("#F4F6FF"),
         body: SizedBox(
@@ -49,58 +100,6 @@ class _HomePageDokterState extends State<HomePageDokter> {
           width: MediaQuery.of(context).size.width,
           child: Column(
             children: [
-              Padding(
-                padding:
-                    EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-                child: Container(
-                  width: 375.w,
-                  height: 55.w,
-                  padding: EdgeInsets.only(top: 8.h, right: 30.w, left: 30.w),
-                  color: Colors.white,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Hello dr. ",
-                                style: TextStyle(
-                                    fontSize: 14.sp,
-                                    color: HexColor('#000000'),
-                                    fontWeight: FontWeight.w300),
-                              ),
-                              Text(
-                                "Carolina Terner",
-                                style: TextStyle(
-                                    fontSize: 18.sp,
-                                    color: HexColor('#000000')),
-                              ),
-                            ],
-                          ),
-                          Expanded(child: Container()),
-                          InkWell(
-                            onTap: () {
-                              Get.to(const LoginPage());
-                            },
-                            child: Container(
-                                alignment: Alignment.center,
-                                width: 40.w,
-                                height: 40.w,
-                                decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    image: DecorationImage(
-                                        image: AssetImage("assets/logo2.png"),
-                                        fit: BoxFit.fitWidth))),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
               SizedBox(
                 height: 20.w,
               ),
@@ -207,14 +206,6 @@ class _HomePageDokterState extends State<HomePageDokter> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     TextButton(
-                      onPressed: () {},
-                      child: Icon(
-                        Icons.account_circle_rounded,
-                        size: 28.w,
-                        color: HexColor("#000000").withOpacity(0.5),
-                      ),
-                    ),
-                    TextButton(
                       onPressed: () {
                         Get.to(const HomePageDokter());
                       },
@@ -224,17 +215,25 @@ class _HomePageDokterState extends State<HomePageDokter> {
                         color: HexColor("#000000").withOpacity(0.8),
                       ),
                     ),
-                    TextButton(
-                      onPressed: () {},
-                      child: Icon(Icons.settings,
-                          size: 28.w,
-                          color: HexColor("#000000").withOpacity(0.5)),
-                    ),
                   ],
                 ),
               )
             ],
           ),
         ));
+  }
+
+  Future<void> logout(BuildContext context) async {
+    await FirebaseAuth.instance.signOut();
+    Get.offAll(const LoginPage());
+  }
+
+  getUsn() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    final DocumentSnapshot userDoc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user?.uid)
+        .get();
+    _name = userDoc.get('username');
   }
 }

@@ -471,28 +471,14 @@ class _AppDokterPageState extends State<AppDokterPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   TextButton(
-                    onPressed: () {},
-                    child: Icon(
-                      Icons.account_circle_rounded,
-                      size: 28.w,
-                      color: HexColor("#000000").withOpacity(0.5),
-                    ),
-                  ),
-                  TextButton(
                     onPressed: () {
-                      Get.to(const HomePageDokter());
+                      Get.back();
                     },
                     child: Icon(
                       Icons.home_rounded,
                       size: 28.w,
-                      color: HexColor("#000000").withOpacity(0.5),
+                      color: HexColor("#000000").withOpacity(0.8),
                     ),
-                  ),
-                  TextButton(
-                    onPressed: () {},
-                    child: Icon(Icons.settings,
-                        size: 28.w,
-                        color: HexColor("#000000").withOpacity(0.5)),
                   ),
                 ],
               ),

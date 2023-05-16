@@ -249,51 +249,6 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                   ),
-                  SizedBox(
-                    height: 15.h,
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      Get.off(const HomePage());
-                    },
-                    child: Container(
-                      height: 50.h,
-                      width: 275.w,
-                      decoration: BoxDecoration(
-                          color: HexColor("#FAF9FE"),
-                          borderRadius: BorderRadius.circular(50),
-                          boxShadow: [
-                            BoxShadow(
-                                blurRadius: 8.r,
-                                color: Colors.black.withOpacity(0.2)),
-                            BoxShadow(
-                                blurRadius: 8.r,
-                                color: Colors.black.withOpacity(0.2))
-                          ]),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            height: 30.w,
-                            width: 30.w,
-                            decoration: const BoxDecoration(
-                              image: DecorationImage(
-                                  image: AssetImage("assets/apple.png"),
-                                  fit: BoxFit.fitWidth),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 8.w,
-                          ),
-                          Text(
-                            "Sign Up With Apple",
-                            style:
-                                TextStyle(fontSize: 14.sp, color: Colors.black),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
                   Expanded(child: Container()),
                   Container(
                     margin: EdgeInsets.symmetric(vertical: 20.h),
@@ -334,9 +289,9 @@ class _LoginPageState extends State<LoginPage> {
         .then((DocumentSnapshot documentSnapshot) {
       if (documentSnapshot.exists) {
         if (documentSnapshot.get('role') == "Dokter") {
-          Get.off(const HomePageDokter());
+          Get.offAll(const HomePageDokter());
         } else {
-          Get.off(const HomePage());
+          Get.offAll(const HomePage());
         }
       } else {
         print('Document does not exist on the database');
