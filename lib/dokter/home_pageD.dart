@@ -6,6 +6,8 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:tubes/login_page.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../database/helper.dart';
+
 class HomePageDokter extends StatefulWidget {
   const HomePageDokter({super.key});
 
@@ -41,11 +43,10 @@ List<Map<String, dynamic>> menu = [
 ];
 
 class _HomePageDokterState extends State<HomePageDokter> {
-  String? _name;
+  final DataBase db = DataBase();
 
   @override
   Widget build(BuildContext context) {
-    getUsn();
     return Scaffold(
         appBar: AppBar(
           title: Column(
@@ -63,10 +64,15 @@ class _HomePageDokterState extends State<HomePageDokter> {
                             color: HexColor('#000000'),
                             fontWeight: FontWeight.w300),
                       ),
-                      Text(
-                        'dr. ${_name?.capitalizeFirst!}',
-                        style: TextStyle(
-                            fontSize: 18.sp, color: HexColor('#000000')),
+                      FutureBuilder(
+                        future: db.getUsn(),
+                        builder: (context, snapshot) {
+                          return Text(
+                            'dr. ${db.name?.capitalizeFirst!}',
+                            style: TextStyle(
+                                fontSize: 18.sp, color: HexColor('#000000')),
+                          );
+                        },
                       ),
                     ],
                   ),
@@ -226,14 +232,5 @@ class _HomePageDokterState extends State<HomePageDokter> {
   Future<void> logout(BuildContext context) async {
     await FirebaseAuth.instance.signOut();
     Get.offAll(const LoginPage());
-  }
-
-  getUsn() async {
-    User? user = FirebaseAuth.instance.currentUser;
-    final DocumentSnapshot userDoc = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(user?.uid)
-        .get();
-    _name = userDoc.get('username');
   }
 }
