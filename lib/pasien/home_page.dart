@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:tubes/database/helper.dart';
 import 'package:tubes/login_page.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -51,12 +52,12 @@ List<Map<String, dynamic>> menu = [
 ];
 
 class _HomePageState extends State<HomePage> {
-  String? _name;
+  final DataBase db = DataBase();
+
   @override
   Widget build(BuildContext context) {
     final bodyHeight =
         MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top;
-    getUsn();
     return Scaffold(
         appBar: AppBar(
           title: Column(
@@ -74,10 +75,15 @@ class _HomePageState extends State<HomePage> {
                             color: HexColor('#000000'),
                             fontWeight: FontWeight.w300),
                       ),
-                      Text(
-                        "${_name?.capitalizeFirst!}",
-                        style: TextStyle(
-                            fontSize: 18.sp, color: HexColor('#000000')),
+                      FutureBuilder(
+                        future: db.getUsn(),
+                        builder: (context, snapshot) {
+                          return Text(
+                            '${db.name?.capitalizeFirst!}',
+                            style: TextStyle(
+                                fontSize: 18.sp, color: HexColor('#000000')),
+                          );
+                        },
                       ),
                     ],
                   ),
@@ -339,14 +345,5 @@ class _HomePageState extends State<HomePage> {
   Future<void> logout(BuildContext context) async {
     Get.offAll(const LoginPage());
     await FirebaseAuth.instance.signOut();
-  }
-
-  void getUsn() async {
-    User? user = FirebaseAuth.instance.currentUser;
-    final DocumentSnapshot userDoc = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(user?.uid)
-        .get();
-    _name = userDoc.get('username');
   }
 }

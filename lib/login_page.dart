@@ -117,8 +117,8 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         suffixIcon: IconButton(
                             icon: Icon(_isObscure3
-                                ? Icons.visibility
-                                : Icons.visibility_off),
+                                ? Icons.visibility_off
+                                : Icons.visibility),
                             onPressed: () {
                               setState(() {
                                 _isObscure3 = !_isObscure3;
