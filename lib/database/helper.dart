@@ -7,6 +7,7 @@ class DataBase {
   var needApprove = [];
   var approved = [];
   var approvedP = [];
+  var pasienList = [];
 
   Future<void> getUsn() async {
     User? user = FirebaseAuth.instance.currentUser;
@@ -28,6 +29,19 @@ class DataBase {
       newDataList.add({'username': data['username']});
     });
     dokterList = newDataList;
+  }
+
+  Future<void> getPasienName() async {
+    List<Map<String, dynamic>> newDataList = [];
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .where('role', isEqualTo: 'Pasien')
+        .get();
+    querySnapshot.docs.forEach((doc) {
+      Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+      newDataList.add({'username': data['username']});
+    });
+    pasienList = newDataList;
   }
 
   Stream<void> getNeedApprove(String? dokter) {
