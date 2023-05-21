@@ -54,13 +54,13 @@ class _MedicalRecordsPageState extends State<MedicalRecordsPage> {
                 "MEDICAL RECORDS",
                 style: TextStyle(
                     fontSize: 15.sp,
-                    color: HexColor("#81B214"),
-                    fontWeight: FontWeight.w500),
+                    color: HexColor("#000000"),
+                    fontWeight: FontWeight.bold),
               ),
             ],
           ),
           automaticallyImplyLeading: false,
-          backgroundColor: Colors.transparent,
+          backgroundColor: Colors.lightGreen,
           elevation: 0.0,
         ),
         body: SizedBox(
@@ -155,11 +155,10 @@ class _MedicalRecordsPageState extends State<MedicalRecordsPage> {
                       SizedBox(
                         height: 15.w,
                       ),
-                      TextField(
+                      TextFormField(
                         onChanged: (value) {
                           selectDatamedrec = value;
                         },
-                        controller: dateController1,
                         decoration: InputDecoration(
                             labelStyle: TextStyle(
                                 fontSize: 12.sp,
@@ -265,23 +264,49 @@ class _MedicalRecordsPageState extends State<MedicalRecordsPage> {
       String tanggal, String pasien, String hari, String datamedrec) async {
     if (_formkey.currentState!.validate()) {
       try {
-        String documentId = '$tanggal-$pasien-$datamedrec';
+        String documentId = '$tanggal-$pasien';
         DocumentSnapshot snapshot = await _app.doc(documentId).get();
-        showDialog(
-          context: context,
-          builder: (BuildContext context) => AlertDialog(
-            content: Text(
-              "Sukses menambahkan Rekam Medis",
-              style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w400),
-            ),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () => Navigator.pop(context, 'OK'),
-                child: const Text('OK'),
+        if (snapshot.exists) {
+          // ignore: use_build_context_synchronously
+          showDialog(
+            context: context,
+            builder: (BuildContext context) => AlertDialog(
+              content: Text(
+                "Pasien $pasien telah memiliki Data Rekam Medis",
+                style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w400),
               ),
-            ],
-          ),
-        );
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.pop(context, 'OK'),
+                  child: const Text('OK'),
+                ),
+              ],
+            ),
+          );
+        } else {
+          _app.doc(documentId).set({
+            'tanggal': tanggal,
+            'pasien': db.name,
+            'hari': hari,
+            'datamedrec': datamedrec
+          });
+          // ignore: use_build_context_synchronously
+          showDialog(
+            context: context,
+            builder: (BuildContext context) => AlertDialog(
+              content: Text(
+                "Sukses menambahkan Data Rekam Medis",
+                style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w400),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.pop(context, 'OK'),
+                  child: const Text('OK'),
+                ),
+              ],
+            ),
+          );
+        }
       } on FirebaseException catch (e) {
         showDialog(
           context: context,
@@ -302,5 +327,3 @@ class _MedicalRecordsPageState extends State<MedicalRecordsPage> {
     }
   }
 }
-
-
