@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 class DataBase {
   String? name;
   var dokterList = [];
+  var pasienList = [];
   var needApprove = [];
   var approved = [];
   var approvedP = [];
@@ -28,6 +29,19 @@ class DataBase {
       newDataList.add({'username': data['username']});
     });
     dokterList = newDataList;
+  }
+
+  Future<void> getPasienName() async {
+    List<Map<String, dynamic>> newDataList = [];
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .where('role', isEqualTo: 'Pasien')
+        .get();
+    querySnapshot.docs.forEach((doc) {
+      Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+      newDataList.add({'username': data['username']});
+    });
+    pasienList = newDataList;
   }
 
   Stream<void> getNeedApprove(String? dokter) {
