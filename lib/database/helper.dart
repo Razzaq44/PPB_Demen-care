@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 class DataBase {
   String? name;
   var dokterList = [];
+  var pasienList = [];
   var needApprove = [];
   var approved = [];
   var approvedP = [];

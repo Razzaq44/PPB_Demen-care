@@ -4,7 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'dokter/AppointmentDokter.dart';
 import 'pasien/Appointment.dart';
 import 'pasien/MedPre_Patient.dart';
-import 'pasien/MedicalRecords.dart';
+import 'dokter/MedicalRecords.dart';
 import 'pasien/diagnosis.dart';
 import 'pasien/home_page.dart';
 import 'login_page.dart';
