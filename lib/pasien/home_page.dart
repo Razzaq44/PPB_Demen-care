@@ -42,13 +42,6 @@ List<Map<String, dynamic>> menu = [
     "image": "assets/medPre.png",
     "page": "medpre"
   },
-  {
-    "title": "Medical Records",
-    "desc":
-        "Ayo lakukan test demensia untuk mengetahui cara penanganan yang tepat..",
-    "image": "assets/medRec.png",
-    "page": "medicalrecords"
-  },
 ];
 
 class _HomePageState extends State<HomePage> {

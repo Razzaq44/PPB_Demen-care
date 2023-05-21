@@ -54,7 +54,7 @@ class _MedicalRecordsPageState extends State<MedicalRecordsPage> {
                 "MEDICAL RECORDS",
                 style: TextStyle(
                     fontSize: 15.sp,
-                    color: HexColor("#000000"),
+                    color: HexColor("#81B214"),
                     fontWeight: FontWeight.w500),
               ),
             ],

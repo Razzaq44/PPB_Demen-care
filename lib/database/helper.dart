@@ -8,7 +8,7 @@ class DataBase {
   var needApprove = [];
   var approved = [];
   var approvedP = [];
-  var pasienList = [];
+  //var pasienList = [];
 
   Future<void> getUsn() async {
     User? user = FirebaseAuth.instance.currentUser;

@@ -38,7 +38,7 @@ List<Map<String, dynamic>> menu = [
     "title": "Medical Records",
     "desc": "Tulis rekam medis setelah tindakan dilakukan",
     "image": "assets/diagnosis.png",
-    "page": "medpre"
+    "page": "medicalrecords"
   },
 ];
 
