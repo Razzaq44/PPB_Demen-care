@@ -1,168 +1,269 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
-import 'package:tubes/login_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import '../database/helper.dart';
 
 class TestDemen extends StatefulWidget {
-  const TestDemen({super.key});
+  const TestDemen({Key? key}) : super(key: key);
 
   @override
   State<TestDemen> createState() => _TestDemenState();
 }
 
 class _TestDemenState extends State<TestDemen> {
-  final items = [
-    ListItem(
-      title: 'Soal nomer 1',
-      description: 'blablablabla',
-      selectedValue: 1,
-    ),
-    ListItem(
-      title: 'Soal nomer 2',
-      description: 'blablablabla',
-      selectedValue: 1,
-    ),
-    ListItem(
-      title: 'soal nomer 3',
-      description: 'description',
-      selectedValue: 1,
-    ),
-    ListItem(
-      title: 'soal nomer 4',
-      description: 'description',
-      selectedValue: 1,
-    ),
-    ListItem(
-      title: 'soal nomer 5',
-      description: 'description',
-      selectedValue: 1,
-    ),
-    ListItem(
-      title: 'soal nomer 6',
-      description: 'description',
-      selectedValue: 1,
-    ),
+  final DataBase db = DataBase();
+
+  final _auth = FirebaseAuth.instance;
+
+  final CollectionReference _app =
+      FirebaseFirestore.instance.collection('testdemensia');
+
+  final jawaban = [
+    0,
+    1,
   ];
+
+  List<String> questions = [
+    "Apakah pasien merasa sering lupa?(ya/tidak)",
+    "Apakah pasien sering melakukan kegiatan berulang walaupun sudah mengerjakannya?(ya/tidak)",
+    "Apakah pasien merasa letih ketika duduk dalam posisi yang lama?(ya/tidak)",
+    "Apakah pasien juga merasa lemas ketika hanya berbaring saja?(ya/tidak)",
+    "Apakah pasien juga sering merasa linglung ketika melakukan kegiatan sehari-hari?(ya/tidak)"
+    // ... tambahkan pertanyaan lainnya sesuai kebutuhan
+  ];
+  late List<TextEditingController> answerControllers;
+  late List<int?> selectjawaban;
+
+  @override
+  void initState() {
+    super.initState();
+    // Inisialisasi controller untuk setiap pertanyaan
+    answerControllers = List.generate(
+      questions.length,
+      (index) => TextEditingController(),
+    );
+    selectjawaban = List.generate(questions.length, (index) => null);
+  }
+
+  @override
+  void dispose() {
+    // Hapus controller ketika tidak lagi diperlukan
+    for (final controller in answerControllers) {
+      controller.dispose();
+    }
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.init(context);
+
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
         title: Row(
           children: [
-            Container(
-              margin: EdgeInsets.only(top: 20),
-              width: 200,
-              height: 40,
-              decoration: BoxDecoration(
-                color: Colors.green,
-                borderRadius: BorderRadius.circular(10),
+            Text(
+              "TEST DEMENSIA",
+              style: TextStyle(
+                fontSize: ScreenUtil().setSp(15),
+                color: HexColor("#000000"),
+                fontWeight: FontWeight.bold,
               ),
-              child: Text(
-                'Test Demensia',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 20,
+            ),
+          ],
+        ),
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.lightGreen,
+        elevation: 0.0,
+      ),
+      body: Padding(
+        padding: EdgeInsets.all(ScreenUtil().setWidth(15)),
+        child: Column(
+          children: [
+            SizedBox(
+              height: ScreenUtil().setHeight(5),
+            ),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.grey[200], // Warna latar belakang
+                borderRadius: BorderRadius.circular(
+                    ScreenUtil().setWidth(10)), // Sudut melengkung pada border
+              ),
+              child: Padding(
+                padding: EdgeInsets.all(ScreenUtil().setWidth(10)),
+                child: Text(
+                  "Petunjuk: 0 = Tidak, 1 = Ya",
+                  style: TextStyle(fontSize: ScreenUtil().setSp(16)),
                 ),
+              ),
+            ),
+            SizedBox(height: ScreenUtil().setHeight(20)),
+            Expanded(
+              child: ListView.builder(
+                itemCount: questions.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: EdgeInsets.symmetric(
+                        vertical: ScreenUtil().setHeight(5)),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: ListTile(
+                            title: Text(
+                              questions[index],
+                              style: TextStyle(
+                                fontSize: ScreenUtil().setSp(16),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: ScreenUtil().setWidth(8)),
+                            child: DropdownButtonFormField(
+                              value: selectjawaban[index],
+                              items: jawaban
+                                  .map((e) => DropdownMenuItem(
+                                        value: e,
+                                        child: Text('$e'),
+                                      ))
+                                  .toList(),
+                              onChanged: (val) {
+                                setState(() {
+                                  selectjawaban[index] = val as int;
+                                });
+                              },
+                              icon: const Icon(
+                                Icons.arrow_drop_down_outlined,
+                              ),
+                              dropdownColor: HexColor("#FAF9FE"),
+                              decoration: InputDecoration(
+                                labelStyle: TextStyle(
+                                  fontSize: ScreenUtil().setSp(12),
+                                  fontWeight: FontWeight.w300,
+                                  color: HexColor("#000000"),
+                                ),
+                                labelText: "Select jawaban",
+                                border: const UnderlineInputBorder(),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
               ),
             ),
           ],
         ),
       ),
-      body: ListView.builder(
-        itemCount: items.length,
-        itemBuilder: (context, index) {
-          final item = items[index];
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ListTile(
-                title: Text(item.title),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 20, left: 100),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    for (int i = 1; i <= 5; i++)
-                      Expanded(
-                        child: Row(
-                          children: [
-                            Radio(
-                              value: i,
-                              groupValue: item.selectedValue,
-                              onChanged: (value) {
-                                // Ketika radio button diubah
-                                setState(() {
-                                  item.selectedValue = value!;
-                                });
-                              },
-                            ),
-                            Text('$i'),
-                          ],
-                        ),
-                      ),
-                  ],
-                ),
-              ),
-            ],
-          );
-        },
-      ),
-      bottomNavigationBar: Container(
-        height: 50,
-        width: double.infinity,
-        margin: EdgeInsets.all(40),
-        child: ElevatedButton(
-          onPressed: () {
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          for (int i = 0; i < 5; i++) {
+            data.add(selectjawaban[i]);
+          }
+          await createApp(data[0], data[1], data[2], data[3], data[4]);
+
+          // Periksa apakah semua jawaban telah terisi
+          bool isAllAnswered = true;
+          for (int? jawaban in selectjawaban) {
+            if (jawaban == null) {
+              isAllAnswered = false;
+              break;
+            }
+          }
+
+          if (isAllAnswered) {
+            hasil(context);
+          } else {
             showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: Text('Anda Belum Login!!'),
-                    content: Text('Login sekarang?'),
-                    actions: [
-                      TextButton(
-                        child: Text('Batal'),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                      ),
-                      ElevatedButton(
-                        child: Text('Iya'),
-                        onPressed: () {
-                          Navigator.pop(context);
-                          Get.to(const LoginPage());
-                        },
-                      )
-                    ],
-                  );
-                });
-          },
-          child: Text('submit'),
-          style: ElevatedButton.styleFrom(
-            minimumSize: Size(100, 30),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(0),
-            ),
-          ),
-        ),
+              context: context,
+              builder: (BuildContext context) => AlertDialog(
+                content: Text(
+                  "Mohon isi semua jawaban!",
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(14),
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () => Navigator.pop(context, 'OK'),
+                    child: const Text('OK'),
+                  ),
+                ],
+              ),
+            );
+          }
+        },
+        tooltip: 'Submit',
+        child: const Icon(Icons.save),
       ),
     );
   }
-}
 
-class ListItem {
-  final String title;
-  final String description;
-  int selectedValue; // Menyimpan nilai radio button yang dipilih
+  List<int?> data = [];
 
-  ListItem({
-    required this.title,
-    required this.description,
-    this.selectedValue = 1,
-  });
+  Future<void> createApp(
+      int? soal1, int? soal2, int? soal3, int? soal4, int? soal5) async {
+    var user = _auth.currentUser;
+    _app.doc(user?.uid).set({
+      'soal1': soal1,
+      'soal2': soal2,
+      'soal3': soal3,
+      'soal4': soal4,
+      'soal5': soal5,
+    });
+  }
+
+  void hasil(BuildContext context) {
+    int sum = 0;
+    for (int i = 0; i < 5; i++) {
+      sum = (selectjawaban[i] ?? 0) + sum;
+    }
+    if (sum < 3) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          content: Text(
+            "Tidak menderita demensia",
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(14),
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.pop(context, 'OK'),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    } else {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          content: Text(
+            "Anda menderita demensia",
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(14),
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Get.back(),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    }
+  }
 }
