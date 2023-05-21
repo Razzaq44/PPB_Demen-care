@@ -26,7 +26,7 @@ List<Map<String, dynamic>> menu = [
     "title": "Diagnosis",
     "desc": "Tulis diagnosis mengenai penyakit pasien anda",
     "image": "assets/medic.png",
-    "page": "appointment"
+    "page": "diagnosisD"
   },
   {
     "title": "Medical Preception",
