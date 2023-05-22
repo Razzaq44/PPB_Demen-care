@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hexcolor/hexcolor.dart';
+// ignore: unused_import
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -115,7 +116,7 @@ class _TestDemenState extends State<TestDemen> {
                             title: Text(
                               questions[index],
                               style: TextStyle(
-                                fontSize: ScreenUtil().setSp(16),
+                                fontSize: ScreenUtil().setSp(14),
                               ),
                             ),
                           ),
@@ -162,55 +163,82 @@ class _TestDemenState extends State<TestDemen> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          for (int i = 0; i < 5; i++) {
-            data.add(selectjawaban[i]);
-          }
-          await createApp(data[0], data[1], data[2], data[3], data[4]);
+      floatingActionButton: Row(
+        children: [
+          SizedBox(width: 160.w),
+          ElevatedButton(
+            onPressed: () async {
+              for (int i = 0; i < 5; i++) {
+                data.add(selectjawaban[i]);
+              }
 
-          // Periksa apakah semua jawaban telah terisi
-          bool isAllAnswered = true;
-          for (int? jawaban in selectjawaban) {
-            if (jawaban == null) {
-              isAllAnswered = false;
-              break;
-            }
-          }
+              // Periksa apakah semua jawaban telah terisi
+              bool isAllAnswered = true;
+              for (int? jawaban in selectjawaban) {
+                if (jawaban == null) {
+                  isAllAnswered = false;
+                  break;
+                }
+              }
 
-          if (isAllAnswered) {
-            hasil(context);
-          } else {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) => AlertDialog(
-                content: Text(
-                  "Mohon isi semua jawaban!",
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(14),
-                    fontWeight: FontWeight.w400,
+              if (isAllAnswered) {
+                int sum = 0;
+                for (int i = 0; i < 5; i++) {
+                  sum = (selectjawaban[i] ?? 0) + sum;
+                }
+
+                String result = sum < 3
+                    ? 'Tidak menderita demensia'
+                    : 'Anda menderita demensia';
+
+                await createApp(
+                    selectjawaban[0],
+                    selectjawaban[1],
+                    selectjawaban[2],
+                    selectjawaban[3],
+                    selectjawaban[4],
+                    result);
+                hasil(context);
+              } else {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                    content: Text(
+                      "Mohon isi semua jawaban!",
+                      style: TextStyle(
+                        fontSize: ScreenUtil().setSp(14),
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, 'OK'),
+                        child: const Text('OK'),
+                      ),
+                    ],
                   ),
-                ),
-                actions: <Widget>[
-                  TextButton(
-                    onPressed: () => Navigator.pop(context, 'OK'),
-                    child: const Text('OK'),
-                  ),
-                ],
+                );
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              primary: Colors.lightGreen, // Warna latar belakang tombol
+            ),
+            child: Text(
+              'Submit',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
               ),
-            );
-          }
-        },
-        tooltip: 'Submit',
-        child: const Icon(Icons.save),
+            ),
+          ),
+        ],
       ),
     );
   }
 
   List<int?> data = [];
 
-  Future<void> createApp(
-      int? soal1, int? soal2, int? soal3, int? soal4, int? soal5) async {
+  Future<void> createApp(int? soal1, int? soal2, int? soal3, int? soal4,
+      int? soal5, String result) async {
     var user = _auth.currentUser;
     _app.doc(user?.uid).set({
       'soal1': soal1,
@@ -218,6 +246,7 @@ class _TestDemenState extends State<TestDemen> {
       'soal3': soal3,
       'soal4': soal4,
       'soal5': soal5,
+      'result': result,
     });
   }
 
@@ -226,44 +255,30 @@ class _TestDemenState extends State<TestDemen> {
     for (int i = 0; i < 5; i++) {
       sum = (selectjawaban[i] ?? 0) + sum;
     }
-    if (sum < 3) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) => AlertDialog(
-          content: Text(
-            "Tidak menderita demensia",
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(14),
-              fontWeight: FontWeight.w400,
-            ),
+
+    String result =
+        sum < 3 ? 'Tidak menderita demensia' : 'Anda menderita demensia';
+
+    createApp(selectjawaban[0], selectjawaban[1], selectjawaban[2],
+        selectjawaban[3], selectjawaban[4], result);
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        content: Text(
+          result,
+          style: TextStyle(
+            fontSize: ScreenUtil().setSp(14),
+            fontWeight: FontWeight.w400,
           ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () => Navigator.pop(context, 'OK'),
-              child: const Text('OK'),
-            ),
-          ],
         ),
-      );
-    } else {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) => AlertDialog(
-          content: Text(
-            "Anda menderita demensia",
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(14),
-              fontWeight: FontWeight.w400,
-            ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context, 'OK'),
+            child: const Text('OK'),
           ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () => Get.back(),
-              child: const Text('OK'),
-            ),
-          ],
-        ),
-      );
-    }
+        ],
+      ),
+    );
   }
 }
