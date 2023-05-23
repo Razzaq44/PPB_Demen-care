@@ -32,7 +32,7 @@ List<Map<String, dynamic>> menu = [
     "title": "Medical Preception",
     "desc": "Berikan resep obat yang sesuai dengan diagnosis penyakit pasien",
     "image": "assets/medPre.png",
-    "page": "diagnosis"
+    "page": "medicine"
   },
   {
     "title": "Medical Records",
