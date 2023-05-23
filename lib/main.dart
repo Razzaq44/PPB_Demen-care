@@ -4,7 +4,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'dokter/AppointmentDokter.dart';
 import 'pasien/Appointment.dart';
 import 'pasien/MedPre_Patient.dart';
-import 'pasien/MedicalRecords.dart';
 import 'pasien/diagnosis.dart';
 import 'pasien/home_page.dart';
 import 'login_page.dart';
@@ -44,9 +43,6 @@ class MyApp extends StatelessWidget {
             GetPage(name: '/appDokter', page: () => const AppDokterPage()),
             GetPage(name: '/test_demensia', page: () => const TestDemen()),
             GetPage(name: '/diagnosis', page: () => const DiagnosisPage()),
-            GetPage(
-                name: '/medicalrecords',
-                page: () => const MedicalRecordsPage()),
             GetPage(name: '/medicine', page: () => const ResepObatPage()),
             GetPage(name: '/medpre', page: () => const MedPrePage()),
           ],

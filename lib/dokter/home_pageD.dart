@@ -36,9 +36,10 @@ List<Map<String, dynamic>> menu = [
   },
   {
     "title": "Medical Records",
-    "desc": "Tulis rekam medis setelah tindakan dilakukan",
-    "image": "assets/diagnosis.png",
-    "page": "medpre"
+    "desc":
+        "Ayo lakukan test demensia untuk mengetahui cara penanganan yang tepat..",
+    "image": "assets/medRec.png",
+    "page": "medicalrecords"
   },
 ];
 
