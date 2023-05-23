@@ -225,9 +225,7 @@ class _TestDemenState extends State<TestDemen> {
             ),
             child: Text(
               'Submit',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14.sp),
             ),
           ),
         ],
