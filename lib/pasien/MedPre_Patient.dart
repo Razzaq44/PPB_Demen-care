@@ -11,7 +11,6 @@ class MedPrePage extends StatefulWidget {
 }
 
 class _MedPrePageState extends State<MedPrePage> {
-  List<Map<String, dynamic>> MedPreData = [];
   final User? currentUser = FirebaseAuth.instance.currentUser;
   final DataBase db = DataBase();
 
@@ -31,11 +30,8 @@ class _MedPrePageState extends State<MedPrePage> {
               Expanded(
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
-                  child: FutureBuilder(
-                    future: db.getUsn(),
-                    builder: (context, snapshot) {
-                      return
-                      StreamBuilder(
+                  child: StreamBuilder(
+
                       stream: db.getresepObat(db.name),
                       builder: (context, snapshot) {
                         return DataTable(
@@ -58,10 +54,8 @@ class _MedPrePageState extends State<MedPrePage> {
                             );
                           }).toList(),
                         );
-                      }
-                    );
-                    },
-                  ),
+                      }),
+
                 ),
               ),
             ],

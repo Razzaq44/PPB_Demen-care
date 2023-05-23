@@ -134,9 +134,11 @@ class DataBase {
       diagnosisDList = newDataList;
     });
   }
+
   Stream<void> getresepObat(String? pasien) {
     return FirebaseFirestore.instance
-        .collection('MedPre_Patient'). where('pasien',isEqualTo: pasien)
+        .collection('resepobat')
+        .where('pasien', isEqualTo: pasien)
         .snapshots()
         .map((QuerySnapshot querySnapshot) {
       List<Map<String, dynamic>> newDataList = [];
@@ -153,5 +155,4 @@ class DataBase {
       resepObatList = newDataList;
     });
   }
-
 }
