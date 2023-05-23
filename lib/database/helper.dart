@@ -9,6 +9,7 @@ class DataBase {
   var approved = [];
   var approvedP = [];
   var diagnosisDList = [];
+  var diagnosisList = [];
 
   Future<void> getUsn() async {
     User? user = FirebaseAuth.instance.currentUser;
@@ -131,6 +132,25 @@ class DataBase {
         });
       });
       diagnosisDList = newDataList;
+    });
+  }
+  Stream<void> getDiagnosis(String? pasien){
+    return FirebaseFirestore.instance
+        .collection('diagnosis').where('pasien', isEqualTo: pasien)
+        .snapshots()
+        .map((QuerySnapshot querySnapshot) {
+      List<Map<String, dynamic>> newDataList = [];
+      querySnapshot.docs.forEach((doc) {
+        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+        newDataList.add({
+          'datadiagnosis': data['datadiagnosis'],
+          'hari': data['hari'],
+          'dokter': data['dokter'],
+          'tanggal': data['tanggal'],
+          'pasien': data['pasien'],
+        });
+      });
+      diagnosisList = newDataList;
     });
   }
 }
