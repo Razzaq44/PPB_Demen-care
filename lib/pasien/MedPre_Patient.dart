@@ -31,6 +31,7 @@ class _MedPrePageState extends State<MedPrePage> {
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: StreamBuilder(
+
                       stream: db.getresepObat(db.name),
                       builder: (context, snapshot) {
                         return DataTable(
@@ -54,6 +55,7 @@ class _MedPrePageState extends State<MedPrePage> {
                           }).toList(),
                         );
                       }),
+
                 ),
               ),
             ],
@@ -61,5 +63,30 @@ class _MedPrePageState extends State<MedPrePage> {
         ),
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
+
+  Future<void> fetchData() async {
+    try {
+      final String currentUserEmail = currentUser?.email ?? '';
+      final QuerySnapshot snapshot = await FirebaseFirestore.instance
+          .collection('MedPre_Patient')
+          .where('pasien', isEqualTo: currentUserEmail)
+          .get();
+
+      if (snapshot.docs.isNotEmpty) {
+        setState(() {
+          MedPreData = snapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
+        });
+      }
+    } catch (e) {
+      // Handle error
+      print(e);
+    }
   }
 }
