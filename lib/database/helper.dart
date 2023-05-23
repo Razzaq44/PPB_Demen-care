@@ -8,7 +8,7 @@ class DataBase {
   var needApprove = [];
   var approved = [];
   var approvedP = [];
-  //var pasienList = [];
+  var diagnosisDList = [];
 
   Future<void> getUsn() async {
     User? user = FirebaseAuth.instance.currentUser;
@@ -111,6 +111,26 @@ class DataBase {
         });
       });
       approvedP = newDataList;
+    });
+  }
+
+  Stream<void> getDiagnosisD(String? dokter) {
+    return FirebaseFirestore.instance
+        .collection('diagnosis')
+        .snapshots()
+        .map((QuerySnapshot querySnapshot) {
+      List<Map<String, dynamic>> newDataList = [];
+      querySnapshot.docs.forEach((doc) {
+        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+        newDataList.add({
+          'datadiagnosis': data['datadiagnosis'],
+          'hari': data['hari'],
+          'dokter': data['dokter'],
+          'tanggal': data['tanggal'],
+          'pasien': data['pasien'],
+        });
+      });
+      diagnosisDList = newDataList;
     });
   }
 }

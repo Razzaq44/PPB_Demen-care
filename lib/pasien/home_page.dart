@@ -116,7 +116,7 @@ class _HomePageState extends State<HomePage> {
                 child: Column(
                   children: [
                     Container(
-                      height: bodyHeight * 0.50,
+                      height: bodyHeight * 0.35,
                       color: Colors.white10.withOpacity(0.1),
                       child: ListView.separated(
                         separatorBuilder: (context, index) {
@@ -124,7 +124,7 @@ class _HomePageState extends State<HomePage> {
                             height: 20.h,
                           );
                         },
-                        itemCount: 3,
+                        itemCount: 2,
                         itemBuilder: (context, index) {
                           return InkWell(
                             onTap: () {
@@ -210,7 +210,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               SizedBox(
-                height: 40.h,
+                height: 20.w,
               ),
               Expanded(
                   child: Container(
@@ -222,10 +222,10 @@ class _HomePageState extends State<HomePage> {
                 child: OverflowBox(
                   maxWidth: MediaQuery.of(context).size.width,
                   child: ListView.builder(
-                    itemCount: (menu.length.toDouble() - 3) ~/ 2,
+                    itemCount: (menu.length - 2) ~/ 2,
                     itemBuilder: (context, index) {
-                      int a = 2 * index + 3;
-                      int b = 2 * index + 2 + 2;
+                      int a = 1 * index + 2;
+                      int b = 1 * index + 3;
                       return Row(
                         children: [
                           InkWell(

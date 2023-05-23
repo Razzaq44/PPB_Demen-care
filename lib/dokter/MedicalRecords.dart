@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -15,17 +14,12 @@ class MedicalRecordsPage extends StatefulWidget {
   State<MedicalRecordsPage> createState() => _MedicalRecordsPageState();
 }
 
-List<Map<String, dynamic>> jadwal = [];
-
 class _MedicalRecordsPageState extends State<MedicalRecordsPage> {
-  _MedicalRecordsPageState(){}
-
   final DataBase db = DataBase();
 
   final _formkey = GlobalKey<FormState>();
-  final _auth = FirebaseAuth.instance;
 
-  final CollectionReference _app =
+  final CollectionReference _medrec =
       FirebaseFirestore.instance.collection('medicalrecords');
 
   TextEditingController dateController1 = TextEditingController();
@@ -47,6 +41,7 @@ class _MedicalRecordsPageState extends State<MedicalRecordsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: Row(
             children: [
@@ -265,7 +260,7 @@ class _MedicalRecordsPageState extends State<MedicalRecordsPage> {
     if (_formkey.currentState!.validate()) {
       try {
         String documentId = '$tanggal-$pasien';
-        DocumentSnapshot snapshot = await _app.doc(documentId).get();
+        DocumentSnapshot snapshot = await _medrec.doc(documentId).get();
         if (snapshot.exists) {
           // ignore: use_build_context_synchronously
           showDialog(
@@ -284,7 +279,7 @@ class _MedicalRecordsPageState extends State<MedicalRecordsPage> {
             ),
           );
         } else {
-          _app.doc(documentId).set({
+          _medrec.doc(documentId).set({
             'tanggal': tanggal,
             'pasien': db.name,
             'hari': hari,

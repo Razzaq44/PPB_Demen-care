@@ -44,13 +44,13 @@ class MyApp extends StatelessWidget {
             GetPage(name: '/appointment', page: () => const AppointmentPage()),
             GetPage(name: '/appDokter', page: () => const AppDokterPage()),
             GetPage(name: '/test_demensia', page: () => const TestDemen()),
+            GetPage(name: '/diagnosisD', page: () => const DiagnosisDPage()),
+            GetPage(name: '/medicine', page: () => const ResepObatPage()),
+            GetPage(name: '/medpre', page: () => const MedPrePage()),
             GetPage(name: '/diagnosis', page: () => const DiagnosisPage()),
-            GetPage(name: '/diagnosisD', page: () => const diagnosisDPage()),
             GetPage(
                 name: '/medicalrecords',
                 page: () => const MedicalRecordsPage()),
-            GetPage(name: '/medicine', page: () => const ResepObatPage()),
-            GetPage(name: '/medpre', page: () => const MedPrePage()),
           ],
           localizationsDelegates: const [
             GlobalMaterialLocalizations.delegate,
