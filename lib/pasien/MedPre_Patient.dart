@@ -1,76 +1,60 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:tubes/database/helper.dart';
 
 class MedPrePage extends StatefulWidget {
-  const MedPrePage({super.key});
+  const MedPrePage({Key? key}) : super(key: key);
 
   @override
-  State<MedPrePage> createState() => _MedPrePage();
+  State<MedPrePage> createState() => _MedPrePageState();
 }
 
-class _MedPrePage extends State<MedPrePage> {
+class _MedPrePageState extends State<MedPrePage> {
+  final User? currentUser = FirebaseAuth.instance.currentUser;
+  final DataBase db = DataBase();
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Medical Prescription For Patient',
-      theme: ThemeData(primarySwatch: Colors.green),
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Medical Prescription For Patient'),
-        ),
-        body: Center(
-          child: DataTable(
-            dataRowColor: MaterialStateColor.resolveWith(
-              (states) => states.contains(MaterialState.selected)
-                  ? Theme.of(context).colorScheme.primary.withOpacity(0.08)
-                  : Colors.grey.shade50,
-            ),
-            dataRowHeight: 70.0,
-            headingRowColor: MaterialStateColor.resolveWith(
-              (states) => Color.fromARGB(255, 57, 253, 64),
-            ),
-            headingRowHeight: 80.0,
-            dividerThickness: 2.0,
-            columns: const <DataColumn>[
-              DataColumn(
-                label: Text(
-                  'ID',
-                  style: TextStyle(fontStyle: FontStyle.italic),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Medical Prescription'),
+      ),
+      body: SingleChildScrollView(
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          child: Column(
+            children: [
+              const SizedBox(height: 15),
+              Expanded(
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: StreamBuilder(
+                      stream: db.getresepObat(db.name),
+                      builder: (context, snapshot) {
+                        return DataTable(
+                          columns: const [
+                            DataColumn(label: Text('Dokter')),
+                            DataColumn(label: Text('Nama Obat')),
+                            DataColumn(label: Text('Note')),
+                            DataColumn(label: Text('Pasien')),
+                            DataColumn(label: Text('Rules')),
+                          ],
+                          rows: db.resepObatList.map<DataRow>((data) {
+                            return DataRow(
+                              cells: [
+                                DataCell(Text(data['dokter'].toString())),
+                                DataCell(Text(data['namaobat'].toString())),
+                                DataCell(Text(data['note'].toString())),
+                                DataCell(Text(data['pasien'].toString())),
+                                DataCell(Text(data['rules'].toString())),
+                              ],
+                            );
+                          }).toList(),
+                        );
+                      }),
                 ),
-              ),
-              DataColumn(
-                label: Text(
-                  'Nama Pasien',
-                  style: TextStyle(fontStyle: FontStyle.italic),
-                ),
-              ),
-              DataColumn(
-                label: Text(
-                  'Obat',
-                  style: TextStyle(fontStyle: FontStyle.italic),
-                ),
-              ),
-              DataColumn(
-                label: Text(
-                  'Dosis',
-                  style: TextStyle(fontStyle: FontStyle.italic),
-                ),
-              ),
-              DataColumn(
-                label: Text(
-                  'Aturan Pakai',
-                  style: TextStyle(fontStyle: FontStyle.italic),
-                ),
-              ),
-            ],
-            rows: const <DataRow>[
-              DataRow(
-                cells: <DataCell>[
-                  DataCell(Text('123')),
-                  DataCell(Text('Budi')),
-                  DataCell(Text('Paracetamol')),
-                  DataCell(Text('500 mg')),
-                  DataCell(Text('3x sehari setelah makan')),
-                ],
               ),
             ],
           ),
