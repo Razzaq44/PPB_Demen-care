@@ -26,7 +26,7 @@ List<Map<String, dynamic>> menu = [
     "title": "Diagnosis",
     "desc": "Tulis diagnosis mengenai penyakit pasien anda",
     "image": "assets/medic.png",
-    "page": "appointment"
+    "page": "diagnosisD"
   },
   {
     "title": "Medical Preception",
@@ -36,9 +36,8 @@ List<Map<String, dynamic>> menu = [
   },
   {
     "title": "Medical Records",
-    "desc":
-        "Ayo lakukan test demensia untuk mengetahui cara penanganan yang tepat..",
-    "image": "assets/medRec.png",
+    "desc": "Tulis rekam medis setelah tindakan dilakukan",
+    "image": "assets/diagnosis.png",
     "page": "medicalrecords"
   },
 ];

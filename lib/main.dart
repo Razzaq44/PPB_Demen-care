@@ -2,8 +2,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'dokter/AppointmentDokter.dart';
+import 'dokter/diagnosisD.dart';
 import 'pasien/Appointment.dart';
 import 'pasien/MedPre_Patient.dart';
+import 'dokter/MedicalRecords.dart';
 import 'pasien/diagnosis.dart';
 import 'pasien/home_page.dart';
 import 'login_page.dart';
@@ -42,9 +44,13 @@ class MyApp extends StatelessWidget {
             GetPage(name: '/appointment', page: () => const AppointmentPage()),
             GetPage(name: '/appDokter', page: () => const AppDokterPage()),
             GetPage(name: '/test_demensia', page: () => const TestDemen()),
-            GetPage(name: '/diagnosis', page: () => const DiagnosisPage()),
+            GetPage(name: '/diagnosisD', page: () => const DiagnosisDPage()),
             GetPage(name: '/medicine', page: () => const ResepObatPage()),
             GetPage(name: '/medpre', page: () => const MedPrePage()),
+            GetPage(name: '/diagnosis', page: () => const DiagnosisPage()),
+            GetPage(
+                name: '/medicalrecords',
+                page: () => const MedicalRecordsPage()),
           ],
           localizationsDelegates: const [
             GlobalMaterialLocalizations.delegate,
