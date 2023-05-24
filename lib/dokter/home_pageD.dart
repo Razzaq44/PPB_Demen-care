@@ -15,33 +15,6 @@ class HomePageDokter extends StatefulWidget {
   State<HomePageDokter> createState() => _HomePageDokterState();
 }
 
-List<Map<String, dynamic>> menu = [
-  {
-    "title": "Appointment",
-    "desc": "Konfirmasi jadwal temu bersama pasienmu",
-    "image": "assets/appointment.png",
-    "page": "appDokter"
-  },
-  {
-    "title": "Diagnosis",
-    "desc": "Tulis diagnosis mengenai penyakit pasien anda",
-    "image": "assets/medic.png",
-    "page": "diagnosisD"
-  },
-  {
-    "title": "Medical Preception",
-    "desc": "Berikan resep obat yang sesuai dengan diagnosis penyakit pasien",
-    "image": "assets/medPre.png",
-    "page": "medicine"
-  },
-  {
-    "title": "Medical Records",
-    "desc": "Tulis rekam medis setelah tindakan dilakukan",
-    "image": "assets/diagnosis.png",
-    "page": "medicalrecords"
-  },
-];
-
 class _HomePageDokterState extends State<HomePageDokter> {
   final DataBase db = DataBase();
 
@@ -114,93 +87,105 @@ class _HomePageDokterState extends State<HomePageDokter> {
                   padding: EdgeInsets.symmetric(horizontal: 30.w),
                   child: Container(
                     color: Colors.white10.withOpacity(0.1),
-                    child: ListView.separated(
-                      separatorBuilder: (context, index) {
-                        return SizedBox(
-                          height: 20.w,
-                        );
-                      },
-                      itemCount: menu.length,
-                      itemBuilder: (context, index) {
-                        return InkWell(
-                          onTap: () {
-                            Get.toNamed(menu[index]["page"].toString());
-                          },
-                          child: SizedBox(
-                            width: MediaQuery.of(context).size.width,
-                            child: Column(
-                              children: [
-                                Container(
-                                  padding: EdgeInsets.only(
-                                    top: 15.h,
-                                    bottom: 5.h,
-                                    left: 15.w,
-                                  ),
-                                  height: 115.w,
-                                  width: 315.w,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: HexColor("#FFFFFF"),
-                                      boxShadow: [
-                                        BoxShadow(
-                                            offset: const Offset(1, 1),
-                                            blurRadius: 6,
-                                            color: HexColor("#BFDCAE")
-                                                .withOpacity(0.2)),
-                                        BoxShadow(
-                                            offset: const Offset(-1, -1),
-                                            blurRadius: 6,
-                                            color: HexColor("#BFDCAE")
-                                                .withOpacity(0.2)),
-                                      ]),
-                                  child: Row(
+                    child: FutureBuilder(
+                        future: db.getMenu(db.role),
+                        builder: (context, snapshot) {
+                          return ListView.separated(
+                            separatorBuilder: (context, index) {
+                              return SizedBox(
+                                height: 20.w,
+                              );
+                            },
+                            itemCount: db.menu.length,
+                            itemBuilder: (context, index) {
+                              return InkWell(
+                                onTap: () {
+                                  Get.toNamed(
+                                      db.menu[index]["page"].toString());
+                                },
+                                child: SizedBox(
+                                  width: MediaQuery.of(context).size.width,
+                                  child: Column(
                                     children: [
-                                      SizedBox(
-                                        width: 175.w,
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                      Container(
+                                        padding: EdgeInsets.only(
+                                          top: 15.h,
+                                          bottom: 5.h,
+                                          left: 15.w,
+                                        ),
+                                        height: 115.w,
+                                        width: 315.w,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            color: HexColor("#FFFFFF"),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                  offset: const Offset(1, 1),
+                                                  blurRadius: 6,
+                                                  color: HexColor("#BFDCAE")
+                                                      .withOpacity(0.2)),
+                                              BoxShadow(
+                                                  offset: const Offset(-1, -1),
+                                                  blurRadius: 6,
+                                                  color: HexColor("#BFDCAE")
+                                                      .withOpacity(0.2)),
+                                            ]),
+                                        child: Row(
                                           children: [
-                                            Text(
-                                              "${menu[index]["title"]}",
-                                              style: TextStyle(
-                                                  fontSize: 22.sp,
-                                                  fontWeight: FontWeight.w600,
-                                                  color: HexColor("#000000")),
-                                            ),
                                             SizedBox(
-                                              height: 5.h,
+                                              width: 175.w,
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    "${db.menu[index]["title"]}",
+                                                    style: TextStyle(
+                                                        fontSize: 22.sp,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        color: HexColor(
+                                                            "#000000")),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 5.h,
+                                                  ),
+                                                  Text(
+                                                      "${db.menu[index]["desc"]}",
+                                                      style: TextStyle(
+                                                          fontSize: 14.sp,
+                                                          fontWeight:
+                                                              FontWeight.normal,
+                                                          color: HexColor(
+                                                                  "#000000")
+                                                              .withOpacity(
+                                                                  0.6))),
+                                                ],
+                                              ),
                                             ),
-                                            Text("${menu[index]["desc"]}",
-                                                style: TextStyle(
-                                                    fontSize: 14.sp,
-                                                    fontWeight:
-                                                        FontWeight.normal,
-                                                    color: HexColor("#000000")
-                                                        .withOpacity(0.6))),
+                                            Container(
+                                              height: 80.w,
+                                              width: 100.w,
+                                              decoration: BoxDecoration(
+                                                  image: DecorationImage(
+                                                      image: AssetImage(
+                                                          db.menu[index]
+                                                              ["image"]),
+                                                      fit: BoxFit.fitWidth)),
+                                            )
                                           ],
                                         ),
                                       ),
-                                      Container(
-                                        height: 80.w,
-                                        width: 100.w,
-                                        decoration: BoxDecoration(
-                                            image: DecorationImage(
-                                                image: AssetImage(
-                                                    menu[index]["image"]),
-                                                fit: BoxFit.fitWidth)),
-                                      )
                                     ],
                                   ),
                                 ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    ),
+                              );
+                            },
+                          );
+                        }),
                   ),
                 ),
               ),

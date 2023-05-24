@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class DataBase {
   String? name;
+  String? role;
   var dokterList = [];
   var pasienList = [];
   var needApprove = [];
@@ -11,6 +12,7 @@ class DataBase {
   var diagnosisDList = [];
   var resepObatList = [];
   var diagnosisList = [];
+  var menu = [];
 
   Future<void> getUsn() async {
     User? user = FirebaseAuth.instance.currentUser;
@@ -19,6 +21,7 @@ class DataBase {
         .doc(user?.uid)
         .get();
     name = userDoc.get('username');
+    role = userDoc.get('role');
   }
 
   Future<void> getDokterName() async {
@@ -176,5 +179,24 @@ class DataBase {
       });
       resepObatList = newDataList;
     });
+  }
+
+  Future<void> getMenu(String? role) async {
+    List<Map<String, dynamic>> newDataList = [];
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('homepage')
+        .where('role', isEqualTo: role)
+        .get();
+    querySnapshot.docs.forEach((doc) {
+      Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+      newDataList.add({
+        'title': data['title'],
+        'desc': data['desc'],
+        'image': data['image'],
+        'page': data['page'],
+        'role': data['role'],
+      });
+    });
+    menu = newDataList;
   }
 }
