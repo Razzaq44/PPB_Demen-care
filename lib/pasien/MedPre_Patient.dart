@@ -29,30 +29,35 @@ class _MedPrePageState extends State<MedPrePage> {
               Expanded(
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
-                  child: StreamBuilder(
-                      stream: db.getresepObat(db.name),
-                      builder: (context, snapshot) {
-                        return DataTable(
-                          columns: const [
-                            DataColumn(label: Text('Dokter')),
-                            DataColumn(label: Text('Nama Obat')),
-                            DataColumn(label: Text('Note')),
-                            DataColumn(label: Text('Pasien')),
-                            DataColumn(label: Text('Rules')),
-                          ],
-                          rows: db.resepObatList.map<DataRow>((data) {
-                            return DataRow(
-                              cells: [
-                                DataCell(Text(data['dokter'].toString())),
-                                DataCell(Text(data['namaobat'].toString())),
-                                DataCell(Text(data['note'].toString())),
-                                DataCell(Text(data['pasien'].toString())),
-                                DataCell(Text(data['rules'].toString())),
+                  child: FutureBuilder(
+                    future: db.getUsn(),
+                    builder: (context, snapshot) {
+                      return StreamBuilder(
+                          stream: db.getresepObat(db.name),
+                          builder: (context, snapshot) {
+                            return DataTable(
+                              columns: const [
+                                DataColumn(label: Text('Dokter')),
+                                DataColumn(label: Text('Nama Obat')),
+                                DataColumn(label: Text('Note')),
+                                DataColumn(label: Text('Pasien')),
+                                DataColumn(label: Text('Rules')),
                               ],
+                              rows: db.resepObatList.map<DataRow>((data) {
+                                return DataRow(
+                                  cells: [
+                                    DataCell(Text(data['dokter'].toString())),
+                                    DataCell(Text(data['namaobat'].toString())),
+                                    DataCell(Text(data['note'].toString())),
+                                    DataCell(Text(data['pasien'].toString())),
+                                    DataCell(Text(data['rules'].toString())),
+                                  ],
+                                );
+                              }).toList(),
                             );
-                          }).toList(),
-                        );
-                      }),
+                          });
+                    },
+                  ),
                 ),
               ),
             ],
