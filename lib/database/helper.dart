@@ -181,24 +181,22 @@ class DataBase {
     });
   }
 
-  Stream<void> getMenu(String? role) {
-    return FirebaseFirestore.instance
+  Future<void> getMenu(String? role) async {
+    List<Map<String, dynamic>> newDataList = [];
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection('homepage')
         .where('role', isEqualTo: role)
-        .snapshots()
-        .map((QuerySnapshot querySnapshot) {
-      List<Map<String, dynamic>> newDataList = [];
-      querySnapshot.docs.forEach((doc) {
-        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-        newDataList.add({
-          'title': data['title'],
-          'desc': data['desc'],
-          'image': data['image'],
-          'page': data['page'],
-          'role': data['role'],
-        });
+        .get();
+    querySnapshot.docs.forEach((doc) {
+      Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+      newDataList.add({
+        'title': data['title'],
+        'desc': data['desc'],
+        'image': data['image'],
+        'page': data['page'],
+        'role': data['role'],
       });
-      menu = newDataList;
     });
+    menu = newDataList;
   }
 }
