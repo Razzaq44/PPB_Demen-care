@@ -86,8 +86,8 @@ class _HomePageState extends State<HomePage> {
                   padding: EdgeInsets.symmetric(horizontal: 30.w),
                   child: Container(
                     color: Colors.white10.withOpacity(0.1),
-                    child: FutureBuilder(
-                        future: db.getMenu(db.role),
+                    child: StreamBuilder(
+                        stream: db.getMenu(db.role),
                         builder: (context, snapshot) {
                           return ListView.separated(
                             separatorBuilder: (context, index) {
