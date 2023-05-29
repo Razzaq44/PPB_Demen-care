@@ -351,17 +351,19 @@ class _RegisterPageState extends State<RegisterPage> {
         );
       }
     }
+    const CircularProgressIndicator();
   }
 
   postDetailsToFirestore(String email, String role, String userName) async {
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
     var user = _auth.currentUser;
-    CollectionReference ref = FirebaseFirestore.instance.collection('users');
+    CollectionReference ref = FirebaseFirestore.instance.collection('akun');
     ref.doc(user!.uid).set(
         {'email': emailController.text, 'role': role, 'username': userName});
   }
 
   login(String email, String password) async {
+    const CircularProgressIndicator();
     try {
       UserCredential userCredential =
           await FirebaseAuth.instance.signInWithEmailAndPassword(
@@ -391,7 +393,7 @@ class _RegisterPageState extends State<RegisterPage> {
   void route() {
     User? user = FirebaseAuth.instance.currentUser;
     var kk = FirebaseFirestore.instance
-        .collection('users')
+        .collection('akun')
         .doc(user!.uid)
         .get()
         .then((DocumentSnapshot documentSnapshot) {

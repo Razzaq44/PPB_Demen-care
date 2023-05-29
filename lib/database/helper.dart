@@ -17,7 +17,7 @@ class DataBase {
   Future<void> getUsn() async {
     User? user = FirebaseAuth.instance.currentUser;
     final DocumentSnapshot userDoc = await FirebaseFirestore.instance
-        .collection('users')
+        .collection('akun')
         .doc(user?.uid)
         .get();
     name = userDoc.get('username');
@@ -27,7 +27,7 @@ class DataBase {
   Future<void> getDokterName() async {
     List<Map<String, dynamic>> newDataList = [];
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection('users')
+        .collection('akun')
         .where('role', isEqualTo: 'Dokter')
         .get();
     querySnapshot.docs.forEach((doc) {
@@ -40,7 +40,7 @@ class DataBase {
   Future<void> getPasienName() async {
     List<Map<String, dynamic>> newDataList = [];
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection('users')
+        .collection('akun')
         .where('role', isEqualTo: 'Pasien')
         .get();
     querySnapshot.docs.forEach((doc) {
@@ -181,22 +181,24 @@ class DataBase {
     });
   }
 
-  Future<void> getMenu(String? role) async {
-    List<Map<String, dynamic>> newDataList = [];
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+  Stream<void> getMenu(String? role) {
+    return FirebaseFirestore.instance
         .collection('homepage')
         .where('role', isEqualTo: role)
-        .get();
-    querySnapshot.docs.forEach((doc) {
-      Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-      newDataList.add({
-        'title': data['title'],
-        'desc': data['desc'],
-        'image': data['image'],
-        'page': data['page'],
-        'role': data['role'],
+        .snapshots()
+        .map((QuerySnapshot querySnapshot) {
+      List<Map<String, dynamic>> newDataList = [];
+      querySnapshot.docs.forEach((doc) {
+        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+        newDataList.add({
+          'title': data['title'],
+          'desc': data['desc'],
+          'image': data['image'],
+          'page': data['page'],
+          'role': data['role'],
+        });
       });
+      menu = newDataList;
     });
-    menu = newDataList;
   }
 }

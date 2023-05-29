@@ -144,20 +144,6 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   SizedBox(
-                    height: 10.h,
-                  ),
-                  Container(
-                    alignment: Alignment.centerRight,
-                    width: MediaQuery.of(context).size.width,
-                    child: TextButton(
-                        onPressed: () {},
-                        child: Text(
-                          "Recovery Password",
-                          style:
-                              TextStyle(color: Colors.black, fontSize: 12.sp),
-                        )),
-                  ),
-                  SizedBox(
                     height: 20.h,
                   ),
                   SizedBox(
@@ -218,7 +204,7 @@ class _LoginPageState extends State<LoginPage> {
   void route() {
     User? user = FirebaseAuth.instance.currentUser;
     var kk = FirebaseFirestore.instance
-        .collection('users')
+        .collection('akun')
         .doc(user!.uid)
         .get()
         .then((DocumentSnapshot documentSnapshot) {
@@ -229,8 +215,15 @@ class _LoginPageState extends State<LoginPage> {
           Get.offAll(const HomePage());
         }
       } else {
-        print('Document does not exist on the database');
+        Get.showSnackbar(
+          const GetSnackBar(
+            message: 'Email and password does not match',
+            icon: Icon(Icons.refresh),
+            duration: Duration(seconds: 3),
+          ),
+        );
       }
+      return const CircularProgressIndicator();
     });
   }
 
@@ -245,35 +238,19 @@ class _LoginPageState extends State<LoginPage> {
         route();
       } on FirebaseAuthException catch (e) {
         if (e.code == 'user-not-found') {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) => AlertDialog(
-              content: Text(
-                'User Not Found',
-                style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w400),
-              ),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () => Navigator.pop(context, 'OK'),
-                  child: const Text('OK'),
-                ),
-              ],
+          Get.showSnackbar(
+            const GetSnackBar(
+              message: 'User Not Found',
+              icon: Icon(Icons.close),
+              duration: Duration(seconds: 3),
             ),
           );
         } else if (e.code == 'wrong-password') {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) => AlertDialog(
-              content: Text(
-                'Wrong password provided for that user.',
-                style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w400),
-              ),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () => Navigator.pop(context, 'OK'),
-                  child: const Text('OK'),
-                ),
-              ],
+          Get.showSnackbar(
+            const GetSnackBar(
+              message: 'Wrong password provided for that user.',
+              icon: Icon(Icons.close),
+              duration: Duration(seconds: 3),
             ),
           );
         }
