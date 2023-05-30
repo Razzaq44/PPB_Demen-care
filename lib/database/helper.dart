@@ -156,7 +156,7 @@ class DataBase {
           'pasien': data['pasien'],
         });
       });
-      diagnosisDList = newDataList;
+      diagnosisList = newDataList;
     });
   }
 
