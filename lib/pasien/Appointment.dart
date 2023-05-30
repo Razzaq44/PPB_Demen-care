@@ -15,8 +15,6 @@ class AppointmentPage extends StatefulWidget {
   State<AppointmentPage> createState() => _AppointmentPageState();
 }
 
-List<Map<String, dynamic>> jadwal = [];
-
 class _AppointmentPageState extends State<AppointmentPage> {
   _AppointmentPageState() {
     selectWaktu = waktuList[0];
@@ -270,8 +268,15 @@ class _AppointmentPageState extends State<AppointmentPage> {
                       SizedBox(
                         height: 15.w,
                       ),
-                      TextField(
+                      TextFormField(
                           controller: dateController1,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Pilih tanggal terlebih dahulu";
+                            } else {
+                              return null;
+                            }
+                          },
                           decoration: InputDecoration(
                               labelStyle: TextStyle(
                                   fontSize: 12.sp,
@@ -321,6 +326,13 @@ class _AppointmentPageState extends State<AppointmentPage> {
                             icon: const Icon(
                               Icons.arrow_drop_down_outlined,
                             ),
+                            validator: (value) {
+                              if (value == null) {
+                                return "Pilih dokter terlebih dahulu";
+                              } else {
+                                return null;
+                              }
+                            },
                             dropdownColor: HexColor("#FAF9FE"),
                             decoration: InputDecoration(
                                 labelStyle: TextStyle(
