@@ -119,6 +119,13 @@ class _ResepObatPageState extends State<ResepObatPage> {
                               Icons.arrow_drop_down_outlined,
                             ),
                             dropdownColor: HexColor("#FAF9FE"),
+                            validator: (value) {
+                              if (value == null) {
+                                return "Pilih pasien terlebih dahulu";
+                              } else {
+                                return null;
+                              }
+                            },
                             decoration: InputDecoration(
                                 labelStyle: TextStyle(
                                     fontSize: 12.sp,
@@ -133,24 +140,45 @@ class _ResepObatPageState extends State<ResepObatPage> {
                       SizedBox(
                         height: 20.w,
                       ),
-                      TextField(
+                      TextFormField(
                           controller: namaobat,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Medicine name cannot be empty";
+                            } else {
+                              return null;
+                            }
+                          },
                           decoration: InputDecoration(
                             labelText: 'Medicine name',
                           )),
                       SizedBox(
                         height: 20.w,
                       ),
-                      TextField(
+                      TextFormField(
                           controller: rules,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Rules cannot be empty";
+                            } else {
+                              return null;
+                            }
+                          },
                           decoration: InputDecoration(
                             labelText: 'Rules',
                           )),
                       SizedBox(
                         height: 20.w,
                       ),
-                      TextField(
+                      TextFormField(
                           controller: note,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Notes cannot be empty";
+                            } else {
+                              return null;
+                            }
+                          },
                           decoration: InputDecoration(
                             labelText: 'Notes',
                           )),

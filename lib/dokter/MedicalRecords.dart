@@ -84,8 +84,15 @@ class _MedicalRecordsPageState extends State<MedicalRecordsPage> {
                       SizedBox(
                         height: 15.w,
                       ),
-                      TextField(
+                      TextFormField(
                           controller: dateController1,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Pilih tanggal terlebih dahulu";
+                            } else {
+                              return null;
+                            }
+                          },
                           decoration: InputDecoration(
                               labelStyle: TextStyle(
                                   fontSize: 12.sp,
@@ -136,6 +143,13 @@ class _MedicalRecordsPageState extends State<MedicalRecordsPage> {
                               Icons.arrow_drop_down_outlined,
                             ),
                             dropdownColor: HexColor("#FAF9FE"),
+                            validator: (value) {
+                              if (value == null) {
+                                return "Pilih pasien terlebih dahulu";
+                              } else {
+                                return null;
+                              }
+                            },
                             decoration: InputDecoration(
                                 labelStyle: TextStyle(
                                     fontSize: 12.sp,
@@ -153,6 +167,13 @@ class _MedicalRecordsPageState extends State<MedicalRecordsPage> {
                       TextFormField(
                         onChanged: (value) {
                           selectDatamedrec = value;
+                        },
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "Medical Record Data tidak boleh kosong";
+                          } else {
+                            return null;
+                          }
                         },
                         decoration: InputDecoration(
                             labelStyle: TextStyle(
