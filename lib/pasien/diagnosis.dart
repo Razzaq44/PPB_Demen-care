@@ -11,7 +11,6 @@ class DiagnosisPage extends StatefulWidget {
 }
 
 class _DiagnosisPageState extends State<DiagnosisPage> {
-  List<Map<String, dynamic>> diagnosisData = [];
   final User? currentUser = FirebaseAuth.instance.currentUser;
   final DataBase db = DataBase();
 
@@ -34,30 +33,27 @@ class _DiagnosisPageState extends State<DiagnosisPage> {
                   child: FutureBuilder(
                     future: db.getUsn(),
                     builder: (context, snapshot) {
-                      return
-                      StreamBuilder(
-                      stream: db.getDiagnosis(db.name),
-                      builder: (context, snapshot) {
-                        return DataTable(
-                          columns: const [
-                            DataColumn(label: Text('Tanggal')),
-                            DataColumn(label: Text('Pasien')),
-                            DataColumn(label: Text('Hari')),
-                            DataColumn(label: Text('Data Diagnosis')),
-                          ],
-                          rows: db.diagnosisList.map<DataRow>((data) {
-                            return DataRow(
-                              cells: [
-                                DataCell(Text(data['tanggal'].toString())),
-                                DataCell(Text(data['pasien'].toString())),
-                                DataCell(Text(data['hari'].toString())),
-                                DataCell(Text(data['datadiagnosis'].toString())),
+                      return StreamBuilder(
+                          stream: db.getDiagnosis(db.name),
+                          builder: (context, snapshot) {
+                            return DataTable(
+                              columns: const [
+                                DataColumn(label: Text('Tanggal')),
+                                DataColumn(label: Text('Hari')),
+                                DataColumn(label: Text('Data Diagnosis')),
                               ],
+                              rows: db.diagnosisList.map<DataRow>((data) {
+                                return DataRow(
+                                  cells: [
+                                    DataCell(Text(data['tanggal'].toString())),
+                                    DataCell(Text(data['hari'].toString())),
+                                    DataCell(
+                                        Text(data['datadiagnosis'].toString())),
+                                  ],
+                                );
+                              }).toList(),
                             );
-                          }).toList(),
-                        );
-                      }
-                    );
+                          });
                     },
                   ),
                 ),
@@ -67,30 +63,5 @@ class _DiagnosisPageState extends State<DiagnosisPage> {
         ),
       ),
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    fetchData();
-  }
-
-  Future<void> fetchData() async {
-    try {
-      final String currentUserEmail = currentUser?.email ?? '';
-      final QuerySnapshot snapshot = await FirebaseFirestore.instance
-          .collection('diagnosis')
-          .where('pasien', isEqualTo: currentUserEmail)
-          .get();
-
-      if (snapshot.docs.isNotEmpty) {
-        setState(() {
-          diagnosisData = snapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
-        });
-      }
-    } catch (e) {
-      // Handle error
-      print(e);
-    }
   }
 }
